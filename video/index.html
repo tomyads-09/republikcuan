@@ -48,18 +48,52 @@
   </section>
 
   <section class="section">
-    <div class="container" style="max-width:900px">
-      <div class="side-box" style="text-align:center;padding:56px 24px">
-        <div style="width:64px;height:64px;border-radius:18px;background:var(--grad-brand);display:grid;place-items:center;margin:0 auto 18px;color:#fff;font-size:26px">▶</div>
-        <h3>Video pertama segera tayang</h3>
-        <p style="color:var(--muted);max-width:440px;margin-inline:auto">
-          Begitu video pertama sudah siap, ganti blok ini dengan embed YouTube menggunakan tag <code>&lt;iframe&gt;</code> — cukup tempel di bawah judul video.
-        </p>
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Pilihan Video</span>
+        <h2 class="mt-0">Tonton &amp; Praktikkan</h2>
+        <p>Kurasi video dari kreator lain yang relevan sama topik Republik Cuan — di-embed langsung dari YouTube, bukan diunggah ulang.</p>
+      </div>
+      <div class="cat-grid" style="grid-template-columns:repeat(3,1fr)">
+
+        <div class="cat-card" style="padding:0;overflow:hidden">
+          <div style="aspect-ratio:16/9;width:100%">
+            <iframe width="100%" height="100%" style="display:block;border:0" src="https://www.youtube.com/embed/4qz6ve49MmQ" title="Cara Mulai Freelancing Buat Pemula | Tutorial Freelancing Bahasa Indonesia" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+          </div>
+          <div style="padding:20px">
+            <span class="eyebrow" style="margin-bottom:10px">Kerja Online</span>
+            <h3 style="font-size:1rem"><a href="https://www.youtube.com/watch?v=4qz6ve49MmQ" target="_blank" rel="noopener">Cara Mulai Freelancing Buat Pemula | Tutorial Freelancing Bahasa Indonesia</a></h3>
+            <p style="color:var(--muted);font-size:.85rem;margin-bottom:0">Video dari YouTube, di-embed sebagai referensi belajar — klik judul untuk lihat channel aslinya.</p>
+          </div>
+        </div>
+
+        <div class="cat-card" style="padding:0;overflow:hidden">
+          <div style="aspect-ratio:16/9;width:100%">
+            <iframe width="100%" height="100%" style="display:block;border:0" src="https://www.youtube.com/embed/o-eMtWScLww" title="7 Ide Usaha Rumahan Modal Kecil Paling Realistis di Indonesia" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+          </div>
+          <div style="padding:20px">
+            <span class="eyebrow orange" style="margin-bottom:10px">Bisnis Sampingan</span>
+            <h3 style="font-size:1rem"><a href="https://www.youtube.com/watch?v=o-eMtWScLww" target="_blank" rel="noopener">7 Ide Usaha Rumahan Modal Kecil Paling Realistis di Indonesia</a></h3>
+            <p style="color:var(--muted);font-size:.85rem;margin-bottom:0">Video dari YouTube, di-embed sebagai referensi belajar — klik judul untuk lihat channel aslinya.</p>
+          </div>
+        </div>
+
+        <div class="cat-card" style="padding:0;overflow:hidden">
+          <div style="aspect-ratio:16/9;width:100%">
+            <iframe width="100%" height="100%" style="display:block;border:0" src="https://www.youtube.com/embed/NL8xQ9DRRro" title="Rekomendasi 15 Tools AI Buat Kerja Kreatif" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+          </div>
+          <div style="padding:20px">
+            <span class="eyebrow green" style="margin-bottom:10px">AI &amp; Otomatisasi</span>
+            <h3 style="font-size:1rem"><a href="https://www.youtube.com/watch?v=NL8xQ9DRRro" target="_blank" rel="noopener">Rekomendasi 15 Tools AI Buat Kerja Kreatif</a></h3>
+            <p style="color:var(--muted);font-size:.85rem;margin-bottom:0">Video dari YouTube, di-embed sebagai referensi belajar — klik judul untuk lihat channel aslinya.</p>
+          </div>
+        </div>
+
       </div>
 
-      <div class="callout" style="margin-top:28px">
-        <b>Contoh embed video (tinggal isi link YouTube):</b><br>
-        <code>&lt;iframe width="100%" height="480" src="https://www.youtube.com/embed/ID_VIDEO" title="Judul Video" frameborder="0" allowfullscreen&gt;&lt;/iframe&gt;</code>
+      <div class="callout" style="margin-top:32px">
+        <b>Catatan buat Tomy:</b> 3 video di atas dipilih dari kreator lain sebagai referensi awal — judul sudah disamakan persis dengan aslinya dan dibuat link ke video YouTube-nya (klik judul untuk lihat nama channel-nya langsung). Cek dulu isi videonya sebelum publish, lalu ganti dengan video channel kamu sendiri begitu sudah ada. Untuk kategori "Aplikasi Penghasil Uang" sengaja belum diisi karena kebanyakan video di topik itu berbau clickbait/promosi aplikasi yang belum jelas keamanannya — lebih aman kamu pilih sendiri setelah verifikasi, atau tunggu video asli dari channel RepublikCuan.<br><br>
+        <b>Cara ganti video:</b> ganti <code>ID_VIDEO</code> pada <code>src="https://www.youtube.com/embed/ID_VIDEO"</code> — ID-nya adalah kode setelah <code>watch?v=</code> di URL YouTube.
       </div>
     </div>
   </section>
