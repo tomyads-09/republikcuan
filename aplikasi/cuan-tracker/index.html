@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cuan Tracker — Republik Cuan</title>
+<meta name="description" content="Lacak modal, pengeluaran, dan pemasukan usahamu, lalu dapatkan saran otomatis dari Cuan Tracker.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="../../assets/icons/favicon-32.png" sizes="32x32">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/style.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="ct-shell">
+  <div class="ct-wrap">
+
+    <a href="../" class="ct-brand-row">
+      <img src="../../assets/images/logo.png" alt="Republik Cuan">
+      <span>Cuan Tracker</span>
+    </a>
+
+    <!-- ====== AUTH VIEWS ====== -->
+    <div id="view-auth">
+      <div class="ct-card">
+        <div class="ct-demo-note">Ini versi prototipe demo — akun &amp; data tersimpan di browser kamu sendiri (belum di server), jadi baru cocok buat coba alurnya dulu.</div>
+
+        <!-- LOGIN -->
+        <div id="form-login">
+          <h1 class="ct-title">Masuk</h1>
+          <p class="ct-sub">Masuk ke akun Cuan Tracker kamu.</p>
+          <div id="login-error"></div>
+          <div class="ct-field"><label for="li-username">Username</label><input id="li-username" autocomplete="username"></div>
+          <div class="ct-field"><label for="li-password">Kata sandi</label><input id="li-password" type="password" autocomplete="current-password"></div>
+          <button class="ct-btn ct-btn-primary" onclick="ctLogin()">Masuk</button>
+          <div class="ct-switch-row">
+            <button class="ct-link" onclick="ctShow('register')">Belum punya akun? Daftar</button><br><br>
+            <button class="ct-link" onclick="ctShow('forgot')">Lupa kata sandi?</button>
+          </div>
+        </div>
+
+        <!-- REGISTER -->
+        <div id="form-register" style="display:none">
+          <h1 class="ct-title">Daftar akun baru</h1>
+          <p class="ct-sub">Isi data usaha kamu dulu sebelum mulai mencatat cuan.</p>
+          <div id="register-error"></div>
+          <div class="ct-field"><label for="rg-nama">Nama kamu</label><input id="rg-nama"></div>
+          <div class="ct-field"><label for="rg-usaha">Nama usaha</label><input id="rg-usaha"></div>
+          <div class="ct-field"><label for="rg-jenis">Jenis usaha</label>
+            <select id="rg-jenis">
+              <option>Kuliner</option><option>Fashion</option><option>Jasa</option>
+              <option>Kerajinan</option><option>Digital/Online</option><option>Lainnya</option>
+            </select>
+          </div>
+          <div class="ct-field"><label for="rg-username">Username</label><input id="rg-username" autocomplete="username"></div>
+          <div class="ct-field"><label for="rg-password">Kata sandi</label><input id="rg-password" type="password" autocomplete="new-password"></div>
+          <div class="ct-field"><label for="rg-password2">Ulangi kata sandi</label><input id="rg-password2" type="password" autocomplete="new-password"></div>
+          <div class="ct-field"><label for="rg-sq">Pertanyaan keamanan (buat reset password nanti)</label>
+            <select id="rg-sq">
+              <option>Nama hewan peliharaan pertama kamu?</option>
+              <option>Kota kelahiran ibu kamu?</option>
+              <option>Nama SD kamu dulu?</option>
+            </select>
+          </div>
+          <div class="ct-field"><label for="rg-sa">Jawaban kamu</label><input id="rg-sa"></div>
+          <button class="ct-btn ct-btn-primary" onclick="ctRegister()">Daftar &amp; masuk</button>
+          <div class="ct-switch-row"><button class="ct-link" onclick="ctShow('login')">Sudah punya akun? Masuk</button></div>
+        </div>
+
+        <!-- FORGOT PASSWORD -->
+        <div id="form-forgot" style="display:none">
+          <h1 class="ct-title">Lupa kata sandi</h1>
+          <p class="ct-sub">Masukkan username kamu dulu.</p>
+          <div id="forgot-error"></div>
+          <div class="ct-field"><label for="fg-username">Username</label><input id="fg-username"></div>
+          <button class="ct-btn ct-btn-ghost" onclick="ctCheckUser()">Lanjut</button>
+
+          <div id="fg-step2" style="display:none;margin-top:20px">
+            <div class="ct-field"><label id="fg-question-label">Pertanyaan keamanan</label><input id="fg-answer" placeholder="Jawaban kamu"></div>
+            <div class="ct-field"><label for="fg-newpass">Kata sandi baru</label><input id="fg-newpass" type="password"></div>
+            <button class="ct-btn ct-btn-primary" onclick="ctResetPassword()">Ganti kata sandi</button>
+          </div>
+          <div class="ct-switch-row"><button class="ct-link" onclick="ctShow('login')">Kembali ke halaman masuk</button></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ====== DASHBOARD (setelah login) ====== -->
+    <div id="view-app" style="display:none">
+      <div class="ct-app-card">
+        <div class="ct-topbar">
+          <div class="who">Masuk sebagai <b id="topbar-name">-</b></div>
+          <button class="ct-logout" onclick="ctLogout()">Keluar</button>
+        </div>
+
+        <div class="ct-tabs">
+          <button class="ct-tab active" data-tab="profil" onclick="ctTab('profil')">Profil</button>
+          <button class="ct-tab" data-tab="modal" onclick="ctTab('modal')">Modal</button>
+          <button class="ct-tab" data-tab="pengeluaran" onclick="ctTab('pengeluaran')">Pengeluaran</button>
+          <button class="ct-tab" data-tab="pemasukan" onclick="ctTab('pemasukan')">Pemasukan</button>
+          <button class="ct-tab" data-tab="saran" onclick="ctTab('saran')">Saran &amp; Solusi</button>
+        </div>
+
+        <!-- TAB: PROFIL -->
+        <div class="ct-panel active" id="panel-profil">
+          <div class="ct-panel-head"><h2>Profil usaha</h2>
+            <button class="ct-btn ct-btn-danger" onclick="ctResetTab('profil')">Reset data profil</button>
+          </div>
+          <div class="ct-field"><label>Nama pemilik</label><input id="pf-nama"></div>
+          <div class="ct-field"><label>Nama usaha</label><input id="pf-usaha"></div>
+          <div class="ct-field"><label>Jenis usaha</label><input id="pf-jenis"></div>
+          <div class="ct-field"><label>Usaha dimulai sejak (tanggal)</label><input id="pf-sejak" type="date"></div>
+          <button class="ct-btn ct-btn-primary" onclick="ctSaveProfil()" style="width:auto;padding-left:28px;padding-right:28px">Simpan profil</button>
+          <p class="ct-chart-caption" id="pf-updated"></p>
+        </div>
+
+        <!-- TAB: MODAL -->
+        <div class="ct-panel" id="panel-modal">
+          <div class="ct-panel-head"><h2>Modal usaha</h2>
+            <button class="ct-btn ct-btn-danger" onclick="ctResetTab('modal')">Reset data modal</button>
+          </div>
+          <div class="ct-field"><label>Modal awal (Rp)</label><input id="md-awal" type="number" min="0"></div>
+          <button class="ct-btn ct-btn-ghost" onclick="ctSaveModalAwal()">Simpan modal awal</button>
+
+          <h3 style="margin-top:24px">Rincian pengeluaran awal</h3>
+          <div class="ct-entry-form">
+            <input id="md-item-nama" placeholder="Contoh: Sewa tempat">
+            <input id="md-item-jumlah" type="number" min="0" placeholder="Jumlah (Rp)">
+            <button class="ct-btn ct-btn-ghost" onclick="ctAddModalItem()">Tambah</button>
+          </div>
+          <div class="ct-list" id="md-list"></div>
+
+          <div class="ct-statgrid" style="margin-top:20px">
+            <div class="ct-stat"><div class="lbl">Total pengeluaran awal</div><div class="val" id="md-total-awal">Rp 0</div></div>
+            <div class="ct-stat"><div class="lbl">Sisa modal</div><div class="val" id="md-sisa">Rp 0</div></div>
+          </div>
+        </div>
+
+        <!-- TAB: PENGELUARAN -->
+        <div class="ct-panel" id="panel-pengeluaran">
+          <div class="ct-panel-head"><h2>Pengeluaran</h2>
+            <button class="ct-btn ct-btn-danger" onclick="ctResetTab('pengeluaran')">Reset data pengeluaran</button>
+          </div>
+          <div class="ct-entry-form">
+            <select id="pg-jenis"><option value="harian">Operasional harian</option><option value="lain">Lain-lain / tak terduga</option></select>
+            <input id="pg-nama" placeholder="Contoh: Bahan baku">
+            <input id="pg-jumlah" type="number" min="0" placeholder="Jumlah (Rp)">
+            <input id="pg-tanggal" type="date">
+            <button class="ct-btn ct-btn-ghost" onclick="ctAddPengeluaran()">Tambah</button>
+          </div>
+          <div class="ct-list" id="pg-list"></div>
+          <div class="ct-stat" style="margin-top:20px"><div class="lbl">Total pengeluaran</div><div class="val" id="pg-total">Rp 0</div></div>
+        </div>
+
+        <!-- TAB: PEMASUKAN -->
+        <div class="ct-panel" id="panel-pemasukan">
+          <div class="ct-panel-head"><h2>Pemasukan</h2>
+            <button class="ct-btn ct-btn-danger" onclick="ctResetTab('pemasukan')">Reset data pemasukan</button>
+          </div>
+          <div class="ct-entry-form">
+            <input id="pm-nama" placeholder="Contoh: Penjualan harian">
+            <input id="pm-jumlah" type="number" min="0" placeholder="Jumlah (Rp)">
+            <input id="pm-tanggal" type="date">
+            <button class="ct-btn ct-btn-ghost" onclick="ctAddPemasukan()">Tambah</button>
+          </div>
+          <div class="ct-list" id="pm-list"></div>
+          <div class="ct-stat" style="margin-top:20px"><div class="lbl">Total pemasukan</div><div class="val" id="pm-total">Rp 0</div></div>
+
+          <div class="ct-chart-box">
+            <canvas id="pm-chart"></canvas>
+            <div class="ct-chart-caption">Grafik progres usaha — pemasukan vs pengeluaran per catatan terakhir</div>
+          </div>
+        </div>
+
+        <!-- TAB: SARAN -->
+        <div class="ct-panel" id="panel-saran">
+          <div class="ct-panel-head"><h2>Saran &amp; solusi</h2></div>
+
+          <div class="ct-statgrid" style="margin-bottom:20px">
+            <div class="ct-stat"><div class="lbl">Laba / rugi</div><div class="val" id="sr-labarugi">Rp 0</div><div class="meta" id="sr-margin"></div></div>
+            <div class="ct-stat"><div class="lbl">Estimasi balik modal</div><div class="val" id="sr-bep" style="font-size:1.2rem">-</div></div>
+          </div>
+
+          <div id="sr-list"></div>
+
+          <div class="ct-reset-row">
+            <button class="ct-btn ct-btn-word" onclick="ctExportWord()">Cetak laporan (Word)</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
