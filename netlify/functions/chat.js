@@ -1,9 +1,12 @@
 // netlify/functions/chat.js
 //
-// Perantara aman antara halaman chat Usaha AI dan API Anthropic.
+// Perantara aman antara halaman chat Usaha AI dan Google Gemini API.
 // API key TIDAK PERNAH dikirim ke browser — hanya hidup di sini,
-// dibaca dari Environment Variable ANTHROPIC_API_KEY yang diatur
+// dibaca dari Environment Variable GEMINI_API_KEY yang diatur
 // lewat dashboard Netlify (Site settings > Environment variables).
+//
+// Gemini API dipilih karena punya tingkatan gratis tanpa kartu kredit
+// dan tanpa kedaluwarsa (beda dengan Anthropic yang butuh isi saldo).
 
 const SYSTEM_PROMPT = `Kamu adalah Usaha AI, asisten bisnis yang ramah dan praktis untuk
 pengusaha, wirausahawan, dan orang yang baru merintis usaha di Indonesia.
@@ -21,7 +24,6 @@ beri info umum tapi sarankan konsultasi ke pihak resmi — jangan berperan sebag
 hukum/pajak resmi.`;
 
 exports.handler = async (event) => {
-  // CORS + hanya izinkan POST
   const headers = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Headers': 'Content-Type',
@@ -43,36 +45,36 @@ exports.handler = async (event) => {
       return { statusCode: 400, headers, body: JSON.stringify({ error: 'messages kosong' }) };
     }
 
-    // Batasi riwayat yang dikirim biar hemat token (10 pesan terakhir cukup)
+    // Batasi riwayat yang dikirim biar hemat kuota (10 pesan terakhir cukup)
     const trimmedHistory = messages.slice(-10);
 
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
+    // Gemini pakai format "contents" dengan role user/model (bukan user/assistant)
+    const contents = trimmedHistory.map((m) => ({
+      role: m.role === 'assistant' ? 'model' : 'user',
+      parts: [{ text: m.content }]
+    }));
+
+    const model = 'gemini-2.5-flash';
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${process.env.GEMINI_API_KEY}`;
+
+    const response = await fetch(url, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': process.env.ANTHROPIC_API_KEY,
-        'anthropic-version': '2023-06-01'
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-6',
-        max_tokens: 700,
-        system: SYSTEM_PROMPT,
-        messages: trimmedHistory
+        contents,
+        systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
+        generationConfig: { maxOutputTokens: 700 }
       })
     });
 
     const data = await response.json();
 
     if (!response.ok) {
-      console.error('Anthropic API error:', data);
+      console.error('Gemini API error:', data);
       return { statusCode: 502, headers, body: JSON.stringify({ error: 'Gagal menghubungi AI' }) };
     }
 
-    const reply = (data.content || [])
-      .filter((block) => block.type === 'text')
-      .map((block) => block.text)
-      .join('\n')
-      .trim();
+    const reply = data?.candidates?.[0]?.content?.parts?.map((p) => p.text).join('\n').trim();
 
     return {
       statusCode: 200,
