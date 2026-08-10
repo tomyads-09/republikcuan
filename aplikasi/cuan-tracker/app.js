@@ -8,9 +8,15 @@ const CT_USERS_KEY = 'ct_users';
 const CT_SESSION_KEY = 'ct_session';
 
 /* --- Placeholder: ganti setelah produk Lynk.id dibuat --- */
-const CT_LYNKID_URL = 'https://lynk.id/GANTI_DENGAN_USERNAME_LYNKID_KAMU/cuan-tracker-professional';
+const CT_LYNKID_URL = 'https://lynk.id/tomyoneclick';
 /* Daftar kode valid — semi-manual dulu, tambah/hapus kode di sini tiap ada penjualan lewat Lynk.id */
-const CT_VALID_CODES = ['RCPRO-DEMO-0001','RCPRO-DEMO-0002','RCPRO-DEMO-0003'];
+/* Angka di kanan = durasi aktif dalam bulan */
+const CT_CODES = {
+  'RCPRO6-DEMO-0001': 6,
+  'RCPRO6-DEMO-0002': 6,
+  'RCPRO12-DEMO-0001': 12,
+  'RCPRO12-DEMO-0002': 12,
+};
 
 function ctFmtRp(n){
   n = Number(n) || 0;
@@ -23,6 +29,14 @@ function ctFmtDate(iso){
   if(!iso) return '-';
   const d = new Date(iso + 'T00:00:00');
   return d.toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric'});
+}
+function ctAddMonths(iso, months){
+  const d = new Date(iso + 'T00:00:00');
+  d.setMonth(d.getMonth() + months);
+  return d.toISOString().slice(0,10);
+}
+function ctDaysBetween(a, b){
+  return Math.round((new Date(b+'T00:00:00') - new Date(a+'T00:00:00')) / 86400000);
 }
 function ctUid(){
   return Date.now().toString(36) + Math.random().toString(36).slice(2,7);
@@ -162,7 +176,13 @@ function ctResetPassword(){
 function ctIsPro(){
   const users = ctGetUsers();
   const u = users[ctCurrentUser()];
-  return !!(u && u.tier === 'professional');
+  if(!u || u.tier !== 'professional') return false;
+  if(u.proExpiry && ctToday() > u.proExpiry){
+    u.tier = 'prototype';
+    ctSaveUsers(users);
+    return false;
+  }
+  return true;
 }
 function ctOpenUpgrade(){
   window.open(CT_LYNKID_URL, '_blank');
@@ -177,7 +197,7 @@ function ctRedeemCode(){
   if(!code){ msg.textContent = 'Masukkan kode dulu.'; msg.style.color = '#A32D2D'; return; }
 
   const used = ctGetUsedCodes();
-  if(!CT_VALID_CODES.includes(code)){
+  if(!(code in CT_CODES)){
     msg.textContent = 'Kode tidak dikenali.'; msg.style.color = '#A32D2D'; return;
   }
   if(used.includes(code)){
@@ -186,18 +206,26 @@ function ctRedeemCode(){
   used.push(code);
   localStorage.setItem('ct_used_codes', JSON.stringify(used));
 
+  const durasiBulan = CT_CODES[code];
+  const expiry = ctAddMonths(ctToday(), durasiBulan);
+
   const users = ctGetUsers();
   users[ctCurrentUser()].tier = 'professional';
+  users[ctCurrentUser()].proExpiry = expiry;
+  users[ctCurrentUser()].proDurasi = durasiBulan;
   ctSaveUsers(users);
 
-  msg.textContent = 'Berhasil! Akun kamu sekarang Professional.'; msg.style.color = '#3B6D11';
+  msg.textContent = `Berhasil! Professional aktif sampai ${ctFmtDate(expiry)}.`; msg.style.color = '#3B6D11';
   codeInput.value = '';
   ctApplyTierUI();
   ctRenderSaran();
 }
 function ctApplyTierUI(){
   const pro = ctIsPro();
+  const users = ctGetUsers();
+  const u = users[ctCurrentUser()] || {};
   const badge = document.getElementById('topbar-badge');
+
   badge.textContent = pro ? 'Professional' : 'Prototipe';
   badge.className = 'ct-badge' + (pro ? ' pro' : '');
   document.getElementById('topbar-upgrade-btn').style.display = pro ? 'none' : 'inline';
@@ -211,6 +239,25 @@ function ctApplyTierUI(){
 
   document.getElementById('saran-pro-content').style.display = pro ? 'block' : 'none';
   document.getElementById('saran-locked').style.display = pro ? 'none' : 'block';
+
+  /* banner masa aktif */
+  const banner = document.getElementById('ct-expiry-banner');
+  if(pro && u.proExpiry){
+    const sisaHari = ctDaysBetween(ctToday(), u.proExpiry);
+    if(sisaHari <= 14){
+      banner.style.display = 'flex';
+      banner.className = 'ct-expiry-banner warn';
+      banner.innerHTML = `⏳ Masa aktif Professional kamu tinggal ${sisaHari} hari lagi (habis ${ctFmtDate(u.proExpiry)}). <button class="ct-btn ct-btn-ghost" onclick="ctOpenUpgrade()">Perpanjang sekarang</button>`;
+    } else {
+      banner.style.display = 'none';
+    }
+  } else if(!pro && u.proExpiry){
+    banner.style.display = 'flex';
+    banner.className = 'ct-expiry-banner expired';
+    banner.innerHTML = `🔒 Masa aktif Professional kamu sudah habis pada ${ctFmtDate(u.proExpiry)}. Fitur Professional dinonaktifkan sementara. <button class="ct-btn ct-btn-primary" style="width:auto;padding-left:20px;padding-right:20px" onclick="ctOpenUpgrade()">Perpanjang</button>`;
+  } else {
+    banner.style.display = 'none';
+  }
 }
 
 
