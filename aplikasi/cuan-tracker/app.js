@@ -7,6 +7,11 @@
 const CT_USERS_KEY = 'ct_users';
 const CT_SESSION_KEY = 'ct_session';
 
+/* --- Placeholder: ganti setelah produk Lynk.id dibuat --- */
+const CT_LYNKID_URL = 'https://lynk.id/GANTI_DENGAN_USERNAME_LYNKID_KAMU/cuan-tracker-professional';
+/* Daftar kode valid — semi-manual dulu, tambah/hapus kode di sini tiap ada penjualan lewat Lynk.id */
+const CT_VALID_CODES = ['RCPRO-DEMO-0001','RCPRO-DEMO-0002','RCPRO-DEMO-0003'];
+
 function ctFmtRp(n){
   n = Number(n) || 0;
   return 'Rp ' + n.toLocaleString('id-ID');
@@ -37,7 +42,7 @@ function ctGetData(username){
   const raw = localStorage.getItem(ctDataKey(username));
   if(raw) return JSON.parse(raw);
   return {
-    profil: {nama:'', usaha:'', jenis:'', sejak:'', updatedAt:''},
+    profil: {nama:'', usaha:'', jenis:'', sejak:'', alamat:'', telp:'', updatedAt:''},
     modal: {modalAwal:0, items:[], updatedAt:''},
     pengeluaran: [],
     pemasukan: []
@@ -91,6 +96,7 @@ function ctRegister(){
   users[username] = {
     nama, usaha, jenis, password: pass,
     securityQuestion: sq, securityAnswer: sa.toLowerCase(),
+    tier: 'prototype',
     createdAt: ctToday()
   };
   ctSaveUsers(users);
@@ -152,13 +158,69 @@ function ctResetPassword(){
   setTimeout(()=>ctShow('login'), 1200);
 }
 
-/* ---------- enter app ---------- */
+/* ---------- tier & professional upgrade ---------- */
+function ctIsPro(){
+  const users = ctGetUsers();
+  const u = users[ctCurrentUser()];
+  return !!(u && u.tier === 'professional');
+}
+function ctOpenUpgrade(){
+  window.open(CT_LYNKID_URL, '_blank');
+}
+function ctGetUsedCodes(){
+  return JSON.parse(localStorage.getItem('ct_used_codes') || '[]');
+}
+function ctRedeemCode(){
+  const codeInput = document.getElementById('redeem-code');
+  const msg = document.getElementById('redeem-msg');
+  const code = codeInput.value.trim().toUpperCase();
+  if(!code){ msg.textContent = 'Masukkan kode dulu.'; msg.style.color = '#A32D2D'; return; }
+
+  const used = ctGetUsedCodes();
+  if(!CT_VALID_CODES.includes(code)){
+    msg.textContent = 'Kode tidak dikenali.'; msg.style.color = '#A32D2D'; return;
+  }
+  if(used.includes(code)){
+    msg.textContent = 'Kode ini sudah pernah dipakai.'; msg.style.color = '#A32D2D'; return;
+  }
+  used.push(code);
+  localStorage.setItem('ct_used_codes', JSON.stringify(used));
+
+  const users = ctGetUsers();
+  users[ctCurrentUser()].tier = 'professional';
+  ctSaveUsers(users);
+
+  msg.textContent = 'Berhasil! Akun kamu sekarang Professional.'; msg.style.color = '#3B6D11';
+  codeInput.value = '';
+  ctApplyTierUI();
+  ctRenderSaran();
+}
+function ctApplyTierUI(){
+  const pro = ctIsPro();
+  const badge = document.getElementById('topbar-badge');
+  badge.textContent = pro ? 'Professional' : 'Prototipe';
+  badge.className = 'ct-badge' + (pro ? ' pro' : '');
+  document.getElementById('topbar-upgrade-btn').style.display = pro ? 'none' : 'inline';
+  document.getElementById('ct-redeem-box').style.display = pro ? 'none' : 'flex';
+
+  document.getElementById('pf-pro-fields').style.display = pro ? 'block' : 'none';
+  document.getElementById('pf-pro-locked').style.display = pro ? 'none' : 'block';
+
+  document.getElementById('pm-chart-box').style.display = pro ? 'block' : 'none';
+  document.getElementById('pm-chart-locked').style.display = pro ? 'none' : 'block';
+
+  document.getElementById('saran-pro-content').style.display = pro ? 'block' : 'none';
+  document.getElementById('saran-locked').style.display = pro ? 'none' : 'block';
+}
+
+
 function ctEnterApp(){
   const username = ctCurrentUser();
   const users = ctGetUsers();
   document.getElementById('topbar-name').textContent = users[username] ? users[username].nama : username;
   document.getElementById('view-auth').style.display = 'none';
   document.getElementById('view-app').style.display = 'block';
+  ctApplyTierUI();
   ctRenderAll();
 }
 
@@ -179,6 +241,8 @@ function ctSaveProfil(){
     usaha: document.getElementById('pf-usaha').value.trim(),
     jenis: document.getElementById('pf-jenis').value.trim(),
     sejak: document.getElementById('pf-sejak').value,
+    alamat: document.getElementById('pf-alamat').value.trim(),
+    telp: document.getElementById('pf-telp').value.trim(),
     updatedAt: ctToday()
   };
   ctSaveData(username, data);
@@ -190,6 +254,8 @@ function ctRenderProfil(){
   document.getElementById('pf-usaha').value = data.profil.usaha || '';
   document.getElementById('pf-jenis').value = data.profil.jenis || '';
   document.getElementById('pf-sejak').value = data.profil.sejak || '';
+  document.getElementById('pf-alamat').value = data.profil.alamat || '';
+  document.getElementById('pf-telp').value = data.profil.telp || '';
   document.getElementById('pf-updated').textContent = data.profil.updatedAt ? ('Terakhir diubah: '+ctFmtDate(data.profil.updatedAt)) : '';
 }
 
@@ -358,7 +424,33 @@ function ctRenderChart(){
   ctx.beginPath(); ctx.moveTo(0,mid); ctx.lineTo(w,mid); ctx.stroke();
 }
 
-/* ---------- kalkulasi & saran ---------- */
+/* ---------- rekap bulanan (Professional) ---------- */
+function ctMonthlyRecap(){
+  const data = ctGetData(ctCurrentUser());
+  const months = new Set();
+  data.pemasukan.forEach(i=>months.add(i.tanggal.slice(0,7)));
+  data.pengeluaran.forEach(i=>months.add(i.tanggal.slice(0,7)));
+  if(data.modal.updatedAt) months.add(data.modal.updatedAt.slice(0,7));
+
+  const sorted = [...months].sort();
+  const modalMonth = data.modal.updatedAt ? data.modal.updatedAt.slice(0,7) : null;
+  const namaBulan = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+
+  return sorted.map(m=>{
+    const [y, mm] = m.split('-');
+    const pemasukanBulan = data.pemasukan.filter(i=>i.tanggal.slice(0,7)===m).reduce((s,i)=>s+i.jumlah,0);
+    const pengeluaranBulan = data.pengeluaran.filter(i=>i.tanggal.slice(0,7)===m).reduce((s,i)=>s+i.jumlah,0);
+    return {
+      label: namaBulan[Number(mm)-1] + ' ' + y,
+      modal: m===modalMonth ? (data.modal.modalAwal||0) : null,
+      pemasukan: pemasukanBulan,
+      pengeluaran: pengeluaranBulan,
+      surplus: pemasukanBulan - pengeluaranBulan
+    };
+  });
+}
+
+
 function ctCalc(){
   const data = ctGetData(ctCurrentUser());
   const totalPemasukan = data.pemasukan.reduce((s,i)=>s+i.jumlah,0);
@@ -388,29 +480,51 @@ function ctRenderSaran(){
   document.getElementById('sr-margin').textContent = c.totalPemasukan>0 ? ('Margin '+c.margin.toFixed(1)+'%') : 'Belum ada pemasukan';
   document.getElementById('sr-bep').textContent = c.bepHari ? (c.bepHari+' hari lagi (estimasi)') : (c.sisaModal<=0 ? 'Modal awal sudah balik' : 'Belum bisa dihitung');
 
-  const saran = [];
+  const arusKas = [], efisiensi = [], potensi = [];
+
   if(c.data.pemasukan.length===0 && c.data.pengeluaran.length===0){
-    saran.push({type:'', text:'Mulai catat pemasukan dan pengeluaran harianmu di tab Pemasukan dan Pengeluaran supaya saran di sini bisa muncul.'});
+    arusKas.push({type:'', text:'Mulai catat pemasukan dan pengeluaran harianmu supaya saran di sini bisa muncul.'});
   }
   if(c.labaRugi < 0){
-    saran.push({type:'warn', text:'Usahamu sedang rugi. Coba cek pengeluaran mana yang paling besar di tab Pengeluaran, dan pertimbangkan untuk memangkas biaya operasional yang tidak wajib dulu.'});
-  }
-  if(c.totalPemasukan>0 && c.margin>0 && c.margin<10){
-    saran.push({type:'warn', text:'Margin keuntunganmu masih tipis (di bawah 10%). Coba naikkan harga jual sedikit, atau cari supplier/bahan baku dengan harga lebih murah.'});
-  }
-  if(c.pengeluaranLainCount>=3){
-    saran.push({type:'warn', text:'Pengeluaran tak terduga sudah muncul beberapa kali. Sisihkan dana darurat khusus usaha supaya tidak mengganggu modal utama.'});
-  }
-  if(c.labaRugi>0 && c.trendNaik){
-    saran.push({type:'good', text:'Kerja bagus, tren labamu naik! Pertimbangkan sisihkan sebagian keuntungan buat nambah stok atau modal usaha.'});
+    arusKas.push({type:'warn', text:`Usahamu sedang rugi ${ctFmtRp(Math.abs(c.labaRugi))}. Cek pengeluaran terbesar di tab Pengeluaran, dan pertimbangkan memangkas biaya yang tidak wajib dulu.`});
   }
   if(c.bepHari && c.bepHari>0){
-    saran.push({type:'', text:'Dengan rata-rata laba saat ini, modal awalmu diperkirakan balik dalam sekitar '+c.bepHari+' hari lagi.'});
+    arusKas.push({type:'', text:'Dengan rata-rata laba saat ini, modal awalmu diperkirakan balik dalam sekitar '+c.bepHari+' hari lagi.'});
+  } else if(c.sisaModal<=0 && c.totalPengeluaranAwal>0){
+    arusKas.push({type:'good', text:'Modal awalmu sudah balik sepenuhnya dari hasil usaha. Mantap!'});
   }
 
-  document.getElementById('sr-list').innerHTML = saran.map(s=>
-    `<div class="ct-saran-card ${s.type}">${s.text}</div>`
-  ).join('');
+  if(c.totalPemasukan>0 && c.margin>0 && c.margin<10){
+    efisiensi.push({type:'warn', text:`Margin keuntunganmu masih tipis (${c.margin.toFixed(1)}%). Coba naikkan harga jual sedikit, atau cari supplier/bahan baku dengan harga lebih murah.`});
+  }
+  if(c.pengeluaranLainCount>=3){
+    const totalLain = c.data.pengeluaran.filter(i=>i.jenis==='lain').reduce((s,i)=>s+i.jumlah,0);
+    efisiensi.push({type:'warn', text:`Pengeluaran tak terduga sudah muncul ${c.pengeluaranLainCount} kali (total ${ctFmtRp(totalLain)}). Sisihkan dana darurat khusus usaha supaya tidak mengganggu modal utama.`});
+  }
+  if(efisiensi.length===0 && c.data.pengeluaran.length>0){
+    efisiensi.push({type:'good', text:'Pengeluaranmu cukup terkendali, belum ada tanda pemborosan berulang.'});
+  }
+
+  if(c.labaRugi>0 && c.trendNaik){
+    potensi.push({type:'good', text:'Tren labamu naik dalam beberapa catatan terakhir. Pertimbangkan sisihkan sebagian keuntungan buat nambah stok atau modal usaha.'});
+  }
+  if(c.totalPemasukan>0 && c.margin>=20){
+    potensi.push({type:'good', text:`Margin kamu sudah cukup sehat (${c.margin.toFixed(1)}%). Ini saat yang bagus buat mulai eksplorasi produk/layanan baru.`});
+  }
+  if(potensi.length===0){
+    potensi.push({type:'', text:'Terus catat data harian secara konsisten supaya sistem bisa kasih saran pertumbuhan yang lebih akurat.'});
+  }
+
+  function renderGroup(title, items){
+    if(items.length===0) return '';
+    return `<h3 style="margin-top:20px;font-size:1.1rem">${title}</h3>` +
+      items.map(s=>`<div class="ct-saran-card ${s.type}">${s.text}</div>`).join('');
+  }
+
+  document.getElementById('sr-list').innerHTML =
+    renderGroup('💰 Arus Kas', arusKas) +
+    renderGroup('✂️ Efisiensi Pengeluaran', efisiensi) +
+    renderGroup('📈 Potensi Pertumbuhan', potensi);
 }
 
 /* ---------- reset per tab ---------- */
@@ -418,7 +532,7 @@ function ctResetTab(tab){
   if(!confirm('Yakin mau hapus semua data di tab ini? Tindakan ini tidak bisa dibatalkan.')) return;
   const username = ctCurrentUser();
   const data = ctGetData(username);
-  if(tab==='profil') data.profil = {nama:'', usaha:'', jenis:'', sejak:'', updatedAt:''};
+  if(tab==='profil') data.profil = {nama:'', usaha:'', jenis:'', sejak:'', alamat:'', telp:'', updatedAt:''};
   if(tab==='modal') data.modal = {modalAwal:0, items:[], updatedAt:''};
   if(tab==='pengeluaran') data.pengeluaran = [];
   if(tab==='pemasukan') data.pemasukan = [];
@@ -428,13 +542,28 @@ function ctResetTab(tab){
 
 /* ---------- export Word ---------- */
 function ctExportWord(){
+  if(!ctIsPro()){
+    alert('Cetak laporan cuma tersedia di paket Professional.');
+    return;
+  }
   const c = ctCalc();
-  const users = ctGetUsers();
-  const u = users[ctCurrentUser()] || {};
+  const recap = ctMonthlyRecap();
+  const recapRows = recap.map(r=>`
+    <tr>
+      <td>${r.label}</td>
+      <td>${r.modal!==null ? ctFmtRp(r.modal) : '-'}</td>
+      <td>${ctFmtRp(r.pengeluaran)}</td>
+      <td>${ctFmtRp(r.pemasukan)}</td>
+      <td>${r.surplus>=0 ? ctFmtRp(r.surplus) : '-'+ctFmtRp(Math.abs(r.surplus))}</td>
+    </tr>`).join('') || '<tr><td colspan="5">Belum ada data</td></tr>';
+
   const content = `
-    <h1 style="font-family:Calibri,Arial,sans-serif">Laporan Cuan Tracker</h1>
-    <p><b>Nama usaha:</b> ${c.data.profil.usaha || '-'}<br>
-    <b>Pemilik:</b> ${c.data.profil.nama || '-'}<br>
+    <div style="border-bottom:2px solid #1D4FD8;padding-bottom:10px;margin-bottom:16px">
+      <h1 style="font-family:Calibri,Arial,sans-serif;margin-bottom:2px">${c.data.profil.usaha || 'Nama Usaha'}</h1>
+      <p style="margin:0">${c.data.profil.alamat || ''}${c.data.profil.alamat && c.data.profil.telp ? ' · ' : ''}${c.data.profil.telp ? 'Telp: '+c.data.profil.telp : ''}</p>
+    </div>
+
+    <p><b>Pemilik:</b> ${c.data.profil.nama || '-'}<br>
     <b>Jenis usaha:</b> ${c.data.profil.jenis || '-'}<br>
     <b>Tanggal laporan:</b> ${ctFmtDate(ctToday())}</p>
 
@@ -445,6 +574,12 @@ function ctExportWord(){
       <tr><td>Total pemasukan</td><td>${ctFmtRp(c.totalPemasukan)}</td></tr>
       <tr><td>Total pengeluaran</td><td>${ctFmtRp(c.totalPengeluaran)}</td></tr>
       <tr><td><b>Laba / rugi</b></td><td><b>${ctFmtRp(c.labaRugi)}</b></td></tr>
+    </table>
+
+    <h2>Rekap bulanan</h2>
+    <table border="1" cellpadding="6" style="border-collapse:collapse;width:100%">
+      <tr><th>Bulan</th><th>Modal</th><th>Pengeluaran</th><th>Pemasukan</th><th>Surplus/Defisit</th></tr>
+      ${recapRows}
     </table>
 
     <h2>Rincian pemasukan</h2>
@@ -461,6 +596,8 @@ function ctExportWord(){
 
     <h2>Saran &amp; solusi</h2>
     <p>${document.getElementById('sr-list').innerText.split('\\n').filter(Boolean).join('<br><br>') || 'Belum ada saran.'}</p>
+
+    <p style="margin-top:24px;font-size:.85rem;color:#6B7488">Dicetak otomatis oleh Cuan Tracker Professional — Republik Cuan</p>
   `;
   const html = `<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
     <head><meta charset='utf-8'><title>Laporan Cuan Tracker</title></head>

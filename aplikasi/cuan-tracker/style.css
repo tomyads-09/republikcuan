@@ -107,3 +107,22 @@
   background:#FAEEDA;color:#633806;font-size:.92rem;padding:12px 16px;
   border-radius:var(--r-sm);margin-bottom:20px;
 }
+
+/* Professional tier UI */
+.ct-badge{
+  display:inline-block;background:var(--bg-alt);color:var(--muted);
+  font-size:.78rem;font-weight:700;padding:3px 10px;border-radius:var(--r-pill);
+  vertical-align:middle;margin-left:6px;text-transform:uppercase;letter-spacing:.03em;
+}
+.ct-badge.pro{background:var(--grad-money);color:#fff}
+.ct-redeem-box{
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  padding:12px 24px;background:var(--bg-alt);border-bottom:1px solid var(--border);font-size:.92rem;
+}
+.ct-redeem-box input{padding:8px 10px;border-radius:var(--r-sm);border:1.5px solid var(--border);flex:1;min-width:160px;max-width:240px}
+.ct-lock-box{
+  text-align:center;padding:32px 20px;background:var(--bg-alt);border-radius:var(--r-md);
+  font-size:1.05rem;color:var(--ink-soft);display:flex;flex-direction:column;align-items:center;gap:14px;
+}
+.ct-lock-note{font-size:.9rem;color:var(--muted);background:var(--bg-alt);padding:10px 14px;border-radius:var(--r-sm)}
+

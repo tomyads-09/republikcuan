@@ -92,8 +92,18 @@
     <div id="view-app" style="display:none">
       <div class="ct-app-card">
         <div class="ct-topbar">
-          <div class="who">Masuk sebagai <b id="topbar-name">-</b></div>
-          <button class="ct-logout" onclick="ctLogout()">Keluar</button>
+          <div class="who">Masuk sebagai <b id="topbar-name">-</b> <span class="ct-badge" id="topbar-badge">Prototipe</span></div>
+          <div style="display:flex;align-items:center;gap:14px">
+            <button class="ct-link" id="topbar-upgrade-btn" onclick="ctOpenUpgrade()">Upgrade ke Professional</button>
+            <button class="ct-logout" onclick="ctLogout()">Keluar</button>
+          </div>
+        </div>
+
+        <div id="ct-redeem-box" class="ct-redeem-box">
+          <span>Sudah punya kode Professional dari Lynk.id?</span>
+          <input id="redeem-code" placeholder="Masukkan kode di sini">
+          <button class="ct-btn ct-btn-ghost" onclick="ctRedeemCode()">Aktifkan</button>
+          <span id="redeem-msg"></span>
         </div>
 
         <div class="ct-tabs">
@@ -113,6 +123,13 @@
           <div class="ct-field"><label>Nama usaha</label><input id="pf-usaha"></div>
           <div class="ct-field"><label>Jenis usaha</label><input id="pf-jenis"></div>
           <div class="ct-field"><label>Usaha dimulai sejak (tanggal)</label><input id="pf-sejak" type="date"></div>
+
+          <div id="pf-pro-fields" style="display:none">
+            <h3 style="margin-top:24px">Kop surat (dipakai di laporan cetak)</h3>
+            <div class="ct-field"><label>Alamat usaha</label><input id="pf-alamat"></div>
+            <div class="ct-field"><label>Nomor telepon usaha</label><input id="pf-telp"></div>
+          </div>
+          <div id="pf-pro-locked" class="ct-lock-note" style="display:none">🔒 Alamat &amp; nomor telepon usaha (buat kop surat laporan) cuma tersedia di paket Professional.</div>
           <button class="ct-btn ct-btn-primary" onclick="ctSaveProfil()" style="width:auto;padding-left:28px;padding-right:28px">Simpan profil</button>
           <p class="ct-chart-caption" id="pf-updated"></p>
         </div>
@@ -169,9 +186,13 @@
           <div class="ct-list" id="pm-list"></div>
           <div class="ct-stat" style="margin-top:20px"><div class="lbl">Total pemasukan</div><div class="val" id="pm-total">Rp 0</div></div>
 
-          <div class="ct-chart-box">
+          <div class="ct-chart-box" id="pm-chart-box">
             <canvas id="pm-chart"></canvas>
             <div class="ct-chart-caption">Grafik progres usaha — pemasukan vs pengeluaran per catatan terakhir</div>
+          </div>
+          <div class="ct-lock-box" id="pm-chart-locked" style="display:none">
+            🔒 Grafik progres usaha cuma tersedia di paket Professional.
+            <button class="ct-btn ct-btn-ghost" onclick="ctOpenUpgrade()">Upgrade sekarang</button>
           </div>
         </div>
 
@@ -179,15 +200,22 @@
         <div class="ct-panel" id="panel-saran">
           <div class="ct-panel-head"><h2>Saran &amp; solusi</h2></div>
 
-          <div class="ct-statgrid" style="margin-bottom:20px">
-            <div class="ct-stat"><div class="lbl">Laba / rugi</div><div class="val" id="sr-labarugi">Rp 0</div><div class="meta" id="sr-margin"></div></div>
-            <div class="ct-stat"><div class="lbl">Estimasi balik modal</div><div class="val" id="sr-bep" style="font-size:1.2rem">-</div></div>
+          <div id="saran-pro-content">
+            <div class="ct-statgrid" style="margin-bottom:20px">
+              <div class="ct-stat"><div class="lbl">Laba / rugi</div><div class="val" id="sr-labarugi">Rp 0</div><div class="meta" id="sr-margin"></div></div>
+              <div class="ct-stat"><div class="lbl">Estimasi balik modal</div><div class="val" id="sr-bep" style="font-size:1.2rem">-</div></div>
+            </div>
+
+            <div id="sr-list"></div>
+
+            <div class="ct-reset-row">
+              <button class="ct-btn ct-btn-word" onclick="ctExportWord()">Cetak laporan (Word)</button>
+            </div>
           </div>
 
-          <div id="sr-list"></div>
-
-          <div class="ct-reset-row">
-            <button class="ct-btn ct-btn-word" onclick="ctExportWord()">Cetak laporan (Word)</button>
+          <div id="saran-locked" class="ct-lock-box" style="display:none">
+            🔒 Saran &amp; solusi otomatis, plus laporan lengkap dengan kop surat &amp; rekap bulanan, cuma tersedia di paket <b>Cuan Tracker Professional</b>.
+            <button class="ct-btn ct-btn-primary" style="width:auto;padding-left:24px;padding-right:24px" onclick="ctOpenUpgrade()">Upgrade ke Professional</button>
           </div>
         </div>
 
