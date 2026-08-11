@@ -8,7 +8,12 @@
 // Gemini API dipilih karena punya tingkatan gratis tanpa kartu kredit
 // dan tanpa kedaluwarsa (beda dengan Anthropic yang butuh isi saldo).
 
-const { getStore } = require('@netlify/blobs');
+let getStore = null;
+try {
+  ({ getStore } = require('@netlify/blobs'));
+} catch (e) {
+  console.error('Gagal load @netlify/blobs, batasan pemakaian dinonaktifkan sementara:', e);
+}
 
 // ---------- Batasan pemakaian harian (biar kuota gratis Gemini nggak habis) ----------
 // Ganti angka ini sesuai kuota harian akun Gemini kamu (cek di Google AI Studio ->
@@ -18,8 +23,20 @@ const WARN_THRESHOLD = 0.9;       // 90% dari limit -> mulai "istirahat"
 const COOLDOWN_MS = 6 * 60 * 60 * 1000; // 6 jam istirahat, sama seperti Claude
 
 async function checkUsage() {
-  const store = getStore('usaha-ai-usage');
-  const raw = await store.get('counter', { type: 'json' });
+  // Kalau blobs nggak tersedia, jangan blokir chat -- cuma lewatkan tanpa hitung.
+  if (!getStore) {
+    return { allowed: true, state: null, store: null };
+  }
+
+  let store, raw;
+  try {
+    store = getStore('usaha-ai-usage');
+    raw = await store.get('counter', { type: 'json' });
+  } catch (e) {
+    console.error('Blobs error, lewati pengecekan limit:', e);
+    return { allowed: true, state: null, store: null };
+  }
+
   const now = Date.now();
 
   let state = raw || { count: 0, cycleStart: now, blockedAt: null };
@@ -51,8 +68,13 @@ async function checkUsage() {
 }
 
 async function incrementUsage(store, state) {
-  state.count += 1;
-  await store.setJSON('counter', state);
+  if (!store || !state) return; // blobs nggak tersedia, lewati diam-diam
+  try {
+    state.count += 1;
+    await store.setJSON('counter', state);
+  } catch (e) {
+    console.error('Gagal simpan counter pemakaian:', e);
+  }
 }
 
 function formatRemaining(ms) {
