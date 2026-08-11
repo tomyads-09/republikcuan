@@ -8,15 +8,77 @@
 // Gemini API dipilih karena punya tingkatan gratis tanpa kartu kredit
 // dan tanpa kedaluwarsa (beda dengan Anthropic yang butuh isi saldo).
 
-const SYSTEM_PROMPT = `Kamu adalah Usaha AI, asisten bisnis yang ramah dan praktis untuk
-pengusaha, wirausahawan, dan orang yang baru merintis usaha di Indonesia.
+const { getStore } = require('@netlify/blobs');
 
-Batasan topik: kamu HANYA membahas hal-hal seputar bisnis dan menjalankan usaha —
-ide usaha, validasi ide, operasional harian, keuangan dasar (modal, HPP, untung-rugi),
-marketing & penjualan, legalitas/administrasi dasar usaha, dan strategi pengembangan usaha.
+// ---------- Batasan pemakaian harian (biar kuota gratis Gemini nggak habis) ----------
+// Ganti angka ini sesuai kuota harian akun Gemini kamu (cek di Google AI Studio ->
+// halaman quota/limits akun kamu). Ini cuma perkiraan awal, sesuaikan kalau perlu.
+const DAILY_LIMIT = 300;          // perkiraan jumlah chat yang aman per hari
+const WARN_THRESHOLD = 0.9;       // 90% dari limit -> mulai "istirahat"
+const COOLDOWN_MS = 6 * 60 * 60 * 1000; // 6 jam istirahat, sama seperti Claude
 
-Kalau ditanya hal di luar topik usaha, tolak dengan sopan dan arahkan balik ke topik usaha,
-contoh: "Wah itu di luar keahlian saya nih, tapi kalau soal usahanya gimana, saya bisa bantu."
+async function checkUsage() {
+  const store = getStore('usaha-ai-usage');
+  const raw = await store.get('counter', { type: 'json' });
+  const now = Date.now();
+
+  let state = raw || { count: 0, cycleStart: now, blockedAt: null };
+
+  // Cycle otomatis reset tiap 24 jam sejak cycle terakhir mulai
+  if (now - state.cycleStart > 24 * 60 * 60 * 1000) {
+    state = { count: 0, cycleStart: now, blockedAt: null };
+  }
+
+  // Kalau lagi masa istirahat (blocked), cek apakah 6 jam-nya udah lewat
+  if (state.blockedAt) {
+    const elapsed = now - state.blockedAt;
+    if (elapsed < COOLDOWN_MS) {
+      const remainingMs = COOLDOWN_MS - elapsed;
+      return { allowed: false, remainingMs, state };
+    }
+    // 6 jam sudah lewat -> reset total, mulai cycle baru
+    state = { count: 0, cycleStart: now, blockedAt: null };
+  }
+
+  const usageRatio = state.count / DAILY_LIMIT;
+  if (usageRatio >= WARN_THRESHOLD) {
+    state.blockedAt = now;
+    await store.setJSON('counter', state);
+    return { allowed: false, remainingMs: COOLDOWN_MS, state };
+  }
+
+  return { allowed: true, state, store };
+}
+
+async function incrementUsage(store, state) {
+  state.count += 1;
+  await store.setJSON('counter', state);
+}
+
+function formatRemaining(ms) {
+  const hours = Math.floor(ms / (60 * 60 * 1000));
+  const minutes = Math.floor((ms % (60 * 60 * 1000)) / (60 * 1000));
+  if (hours > 0) return `${hours} jam ${minutes} menit`;
+  return `${minutes} menit`;
+}
+
+const SYSTEM_PROMPT = `Kamu adalah Usaha AI, asisten pintar dan ramah dari Republik Cuan.
+
+Kamu boleh menjawab pertanyaan apa saja yang ditanyakan user — nggak dibatasi cuma
+topik bisnis/usaha. Fokus utamamu tetap membantu soal usaha (ide usaha, validasi ide,
+operasional harian, keuangan dasar, marketing, legalitas, resep/formulasi produk,
+strategi pengembangan usaha), dan itu yang paling kamu kuasai — tapi kalau user tanya
+hal lain (pengetahuan umum, teknologi, kesehatan sehari-hari, pelajaran, dll), tetap
+jawab dengan baik dan solutif, jangan ditolak.
+
+Gaya jawaban: relevan sama pertanyaannya (jangan melenceng ke topik lain), langsung
+kasih solusi/jawaban konkret duluan, baru penjelasan singkat kalau perlu — bukan teori
+berbelit. Kalau pertanyaannya butuh langkah-langkah, kasih dalam bentuk poin yang jelas.
+
+Untuk topik sensitif seperti medis, hukum, atau keuangan yang butuh keputusan besar,
+tetap kasih info umum yang membantu, tapi ingatkan user buat konsultasi ke ahli/pihak
+resmi untuk keputusan final — jangan berperan seolah kamu pengganti dokter/pengacara/
+konsultan resmi.
 
 Gaya bicara: santai tapi kredibel, bahasa Indonesia sehari-hari, jawaban singkat dan
 langsung ke tindakan konkret (bukan teori berbelit). Untuk topik legal/pajak yang rumit,
@@ -39,6 +101,18 @@ exports.handler = async (event) => {
   }
 
   try {
+    const usage = await checkUsage();
+    if (!usage.allowed) {
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify({
+          reply: `Usaha AI lagi istirahat sebentar karena pemakaian hari ini sudah penuh 🙏 Coba lagi dalam ${formatRemaining(usage.remainingMs)} ya.`,
+          limited: true
+        })
+      };
+    }
+
     const { messages } = JSON.parse(event.body || '{}');
 
     if (!Array.isArray(messages) || messages.length === 0) {
@@ -73,6 +147,9 @@ exports.handler = async (event) => {
       console.error('Gemini API error:', data);
       return { statusCode: 502, headers, body: JSON.stringify({ error: 'Gagal menghubungi AI' }) };
     }
+
+    // Sukses -> hitung pemakaian
+    await incrementUsage(usage.store, usage.state);
 
     const reply = data?.candidates?.[0]?.content?.parts?.map((p) => p.text).join('\n').trim();
 
