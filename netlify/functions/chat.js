@@ -23,14 +23,21 @@ const WARN_THRESHOLD = 0.9;       // 90% dari limit -> mulai "istirahat"
 const COOLDOWN_MS = 6 * 60 * 60 * 1000; // 6 jam istirahat, sama seperti Claude
 
 async function checkUsage() {
-  // Kalau blobs nggak tersedia, jangan blokir chat -- cuma lewatkan tanpa hitung.
-  if (!getStore) {
+  // Kalau blobs nggak tersedia (library gagal load ATAU env var belum di-set),
+  // jangan blokir chat -- cuma lewatkan tanpa hitung pemakaian.
+  if (!getStore || !process.env.BLOBS_SITE_ID || !process.env.BLOBS_TOKEN) {
     return { allowed: true, state: null, store: null };
   }
 
   let store, raw;
   try {
-    store = getStore('usaha-ai-usage');
+    // Mode manual (siteID + token) -- lebih stabil daripada auto-detect,
+    // yang kadang gagal di beberapa environment Netlify.
+    store = getStore({
+      name: 'usaha-ai-usage',
+      siteID: process.env.BLOBS_SITE_ID,
+      token: process.env.BLOBS_TOKEN
+    });
     raw = await store.get('counter', { type: 'json' });
   } catch (e) {
     console.error('Blobs error, lewati pengecekan limit:', e);
@@ -159,7 +166,7 @@ exports.handler = async (event) => {
       body: JSON.stringify({
         contents,
         systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
-        generationConfig: { maxOutputTokens: 700 }
+        generationConfig: { maxOutputTokens: 8192 }
       })
     });
 
@@ -173,7 +180,12 @@ exports.handler = async (event) => {
     // Sukses -> hitung pemakaian
     await incrementUsage(usage.store, usage.state);
 
-    const reply = data?.candidates?.[0]?.content?.parts?.map((p) => p.text).join('\n').trim();
+    const finishReason = data?.candidates?.[0]?.finishReason;
+    let reply = data?.candidates?.[0]?.content?.parts?.map((p) => p.text).join('\n').trim();
+
+    if (reply && finishReason === 'MAX_TOKENS') {
+      reply += '\n\n_(Jawaban ini kepanjangan jadi kepotong -- ketik "lanjutkan" buat nerusin ya)_';
+    }
 
     return {
       statusCode: 200,
