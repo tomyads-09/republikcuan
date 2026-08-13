@@ -155,6 +155,8 @@ button{font-family:inherit}
 .ticker-bar:hover .ticker-track{animation-play-state:paused}
 .ticker-item{display:inline-flex;align-items:center;gap:10px;font-size:13.5px;font-weight:500;padding:11px 32px;border-right:1px solid rgba(255,255,255,.12)}
 .ticker-item .dot{width:6px;height:6px;border-radius:50%;background:var(--green-500)}
+.ticker-item a{color:#fff;text-decoration:none}
+.ticker-item a:hover{text-decoration:underline}
 @keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
 /* =================== HERO =================== */
