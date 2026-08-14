@@ -204,6 +204,9 @@ button{font-family:inherit}
 .cat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
 @media (max-width:900px){ .cat-grid{grid-template-columns:repeat(2,1fr)} }
 @media (max-width:520px){ .cat-grid{grid-template-columns:1fr} }
+.cat-grid-3{grid-template-columns:repeat(3,1fr)}
+@media (max-width:900px){ .cat-grid-3{grid-template-columns:repeat(2,1fr)} }
+@media (max-width:520px){ .cat-grid-3{grid-template-columns:1fr} }
 .cat-card{
   background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);
   padding:24px;transition:.2s ease;position:relative;overflow:hidden;
@@ -218,6 +221,13 @@ button{font-family:inherit}
 .article-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
 @media (max-width:960px){ .article-grid{grid-template-columns:repeat(2,1fr)} }
 @media (max-width:640px){ .article-grid{grid-template-columns:1fr} }
+.article-grid-2{grid-template-columns:repeat(2,1fr)}
+@media (max-width:640px){ .article-grid-2{grid-template-columns:1fr} }
+@media (max-width:640px){
+  .promo-banner{flex-direction:column;align-items:flex-start !important;text-align:left;padding:22px 20px !important}
+  .promo-banner img,.promo-banner > div:first-child{width:56px !important;height:56px !important;font-size:1.3rem !important}
+  .promo-banner .btn{width:100%;text-align:center;margin-top:6px}
+}
 .article-card{
   background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;
   display:flex;flex-direction:column;transition:.2s ease;height:100%;
