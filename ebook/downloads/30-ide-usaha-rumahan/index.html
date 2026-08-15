@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+<title>30 Ide Usaha Rumahan Modal Kecil — Baca Online</title>
+<style>
+  :root{
+    --cream:#FBF3E7;
+    --paper:#FFFDF9;
+    --ink:#2B2118;
+    --green:#2D4739;
+    --rust:#C7502F;
+    --orange:#E8734A;
+    --muted:#8a7a68;
+    --shadow: 0 30px 60px -20px rgba(45,25,10,0.45);
+  }
+  *{box-sizing:border-box;}
+  html,body{
+    margin:0; padding:0; height:100%;
+    background: radial-gradient(1200px 800px at 50% -10%, #3a5344 0%, #1c2b22 55%, #141f19 100%);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Calibri, Roboto, sans-serif;
+    overflow:hidden;
+    color: var(--cream);
+  }
+  .app{
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+  }
+
+  /* Top bar */
+  .topbar{
+    position:absolute; top:0; left:0; right:0;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px 22px;
+    z-index:20;
+    pointer-events:none;
+  }
+  .brand{
+    display:flex; align-items:center; gap:10px;
+    font-size:14px; letter-spacing:0.06em; text-transform:uppercase;
+    color:#e8dfce; opacity:0.85; font-weight:600;
+    pointer-events:auto;
+  }
+  .brand .dot{width:7px;height:7px;border-radius:50%;background:var(--orange);}
+  .top-actions{ pointer-events:auto; display:flex; gap:10px; }
+  .icon-btn{
+    background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.14);
+    color:#f3ead9;
+    width:38px; height:38px;
+    border-radius:10px;
+    cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    transition: background .15s ease, transform .15s ease;
+    backdrop-filter: blur(4px);
+  }
+  .icon-btn:hover{ background:rgba(255,255,255,0.18); transform: translateY(-1px); }
+  .icon-btn svg{ width:18px; height:18px; }
+
+  /* Stage */
+  .stage{
+    position:relative;
+    display:flex; align-items:center; justify-content:center;
+    width:100%; height:100%;
+    perspective: 2600px;
+  }
+
+  .book{
+    position:relative;
+    box-shadow: var(--shadow);
+    border-radius: 4px;
+    background:#111;
+    transform-style: preserve-3d;
+  }
+
+  .page-layer{
+    position:absolute; top:0; left:0; width:100%; height:100%;
+    transform-style: preserve-3d;
+    transform-origin: left center;
+    backface-visibility:hidden;
+    border-radius: 4px;
+    overflow:hidden;
+    background: var(--paper);
+  }
+  .page-layer img{
+    width:100%; height:100%; object-fit:cover; display:block;
+    -webkit-user-drag:none; user-select:none;
+    pointer-events:none;
+  }
+  .page-layer.flipping{
+    transition: transform 0.65s cubic-bezier(.4,.1,.2,1);
+  }
+  .page-shade{
+    position:absolute; top:0; left:0; right:0; bottom:0;
+    background:linear-gradient(90deg, rgba(0,0,0,0.35), rgba(0,0,0,0) 40%);
+    opacity:0;
+    transition: opacity .65s ease;
+    pointer-events:none;
+  }
+
+  .edge-hint{
+    position:absolute; top:0; bottom:0; width:12%;
+    cursor:pointer;
+    z-index:10;
+  }
+  .edge-hint.left{ left:0; }
+  .edge-hint.right{ right:0; }
+
+  /* Controls */
+  .controls{
+    position:absolute; bottom:18px; left:0; right:0;
+    display:flex; align-items:center; justify-content:center;
+    gap:16px;
+    z-index:20;
+  }
+  .nav-btn{
+    background:rgba(255,255,255,0.1);
+    border:1px solid rgba(255,255,255,0.16);
+    color:#f6efe0;
+    width:46px; height:46px;
+    border-radius:50%;
+    cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    transition: background .15s ease, transform .15s ease, opacity .15s ease;
+    backdrop-filter: blur(4px);
+  }
+  .nav-btn:hover{ background: var(--orange); }
+  .nav-btn:disabled{ opacity:0.25; cursor:default; }
+  .nav-btn:disabled:hover{ background:rgba(255,255,255,0.1); }
+  .nav-btn svg{ width:20px; height:20px; }
+
+  .page-indicator{
+    min-width:96px;
+    text-align:center;
+    font-variant-numeric: tabular-nums;
+    font-size:14px;
+    color:#e8dfce;
+    background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.14);
+    padding:10px 16px;
+    border-radius:999px;
+    backdrop-filter: blur(4px);
+  }
+
+  /* progress bar */
+  .progress-track{
+    position:absolute; bottom:0; left:0; right:0; height:3px;
+    background: rgba(255,255,255,0.08);
+    z-index:20;
+  }
+  .progress-fill{
+    height:100%;
+    background: linear-gradient(90deg, var(--orange), var(--rust));
+    transition: width .35s ease;
+  }
+
+  /* thumbnail strip (grid overview) */
+  .grid-overlay{
+    position:fixed; inset:0;
+    background: rgba(15,20,17,0.96);
+    z-index:100;
+    display:none;
+    padding:70px 5vw 40px;
+    overflow-y:auto;
+  }
+  .grid-overlay.open{ display:block; }
+  .grid-overlay h2{
+    color:#f3ead9; font-weight:600; font-size:20px; margin:0 0 22px 4px; letter-spacing:0.02em;
+  }
+  .grid-wrap{
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap:16px;
+  }
+  .grid-item{
+    cursor:pointer;
+    border-radius:6px;
+    overflow:hidden;
+    border:2px solid transparent;
+    transition: border-color .15s ease, transform .15s ease;
+    background:#222;
+  }
+  .grid-item:hover{ border-color: var(--orange); transform: translateY(-2px); }
+  .grid-item img{ width:100%; display:block; }
+  .grid-item .num{
+    font-size:11px; color:#cbbfa8; text-align:center; padding:4px 0; background:#1a221c;
+  }
+  .close-grid{
+    position:fixed; top:18px; right:22px; z-index:101;
+  }
+
+  .hint-tap{
+    position:absolute; bottom:76px; left:50%; transform:translateX(-50%);
+    font-size:12px; color:#cfc4ae; opacity:0.75;
+    pointer-events:none;
+    z-index:5;
+    letter-spacing:0.02em;
+  }
+
+  @media (max-width: 640px){
+    .brand span.txt{ display:none; }
+    .controls{ gap:10px; }
+    .page-indicator{ min-width:76px; font-size:12px; padding:8px 12px; }
+    .nav-btn{ width:40px; height:40px; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="topbar">
+    <div class="brand"><span class="dot"></span><span class="txt">30 Ide Usaha Rumahan Modal Kecil</span></div>
+    <div class="top-actions">
+      <button class="icon-btn" id="gridBtn" title="Lihat semua halaman">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      </button>
+      <button class="icon-btn" id="fsBtn" title="Layar penuh">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M21 16v3a2 2 0 0 1-2 2h-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="stage" id="stage">
+    <div class="book" id="book">
+      <div class="edge-hint left" id="edgeLeft"></div>
+      <div class="edge-hint right" id="edgeRight"></div>
+    </div>
+  </div>
+
+  <div class="hint-tap" id="hintTap">Klik tepi kanan/kiri, atau geser, untuk membalik halaman</div>
+
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+
+  <div class="controls">
+    <button class="nav-btn" id="prevBtn" title="Halaman sebelumnya">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <div class="page-indicator" id="pageIndicator">1 / 1</div>
+    <button class="nav-btn" id="nextBtn" title="Halaman berikutnya">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M9 18l6-6-6-6"/></svg>
+    </button>
+  </div>
+
+  <div class="grid-overlay" id="gridOverlay">
+    <button class="icon-btn close-grid" id="closeGrid">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+    <h2>Semua Halaman</h2>
+    <div class="grid-wrap" id="gridWrap"></div>
+  </div>
+
+</div>
+
+<script src="pages_data.js"></script>
+<script>
+(function(){
+  const pages = FLIPBOOK_PAGES;
+  const total = pages.length;
+  let current = 0; // 0-indexed
+  let animating = false;
+
+  const book = document.getElementById('book');
+  const stage = document.getElementById('stage');
+  const pageIndicator = document.getElementById('pageIndicator');
+  const progressFill = document.getElementById('progressFill');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const hintTap = document.getElementById('hintTap');
+
+  // determine page pixel size from first image aspect, fit to viewport
+  const probe = new Image();
+  let aspect = 758/1075;
+  probe.onload = function(){
+    aspect = probe.width / probe.height;
+    sizeBook();
+  };
+  probe.src = pages[0];
+
+  function sizeBook(){
+    const vw = stage.clientWidth, vh = stage.clientHeight;
+    const maxW = vw * 0.86, maxH = vh * 0.82;
+    let h = maxH, w = h * aspect;
+    if (w > maxW){ w = maxW; h = w / aspect; }
+    book.style.width = w + 'px';
+    book.style.height = h + 'px';
+  }
+  window.addEventListener('resize', sizeBook);
+
+  // Build two layers: topEl (visible, flat) and bottomEl (prepared target, animates when needed)
+  const layerA = document.createElement('div');
+  layerA.className = 'page-layer';
+  const imgA = document.createElement('img');
+  layerA.appendChild(imgA);
+
+  const layerB = document.createElement('div');
+  layerB.className = 'page-layer';
+  const imgB = document.createElement('img');
+  layerB.appendChild(imgB);
+
+  book.appendChild(layerA);
+  book.appendChild(layerB);
+  const edgeLeftEl = document.getElementById('edgeLeft');
+  const edgeRightEl = document.getElementById('edgeRight');
+  book.appendChild(edgeLeftEl);
+  book.appendChild(edgeRightEl);
+
+  // topEl = currently visible flat page (zIndex 6). bottomEl = staging layer.
+  let topEl = layerA, bottomEl = layerB;
+  let topImg = imgA, bottomImg = imgB;
+
+  function setInstant(el, deg, z){
+    el.classList.remove('flipping');
+    el.style.transition = 'none';
+    el.style.transform = 'rotateY(' + deg + 'deg)';
+    el.style.zIndex = z;
+    // force reflow so the next transition change is picked up cleanly
+    void el.offsetWidth;
+    el.style.transition = '';
+  }
+
+  function initLayers(){
+    topImg.src = pages[current];
+    setInstant(topEl, 0, 6);
+    setInstant(bottomEl, 0, 4);
+  }
+
+  function render(){
+    pageIndicator.textContent = (current+1) + ' / ' + total;
+    progressFill.style.width = ((current+1)/total*100) + '%';
+    prevBtn.disabled = current === 0;
+    nextBtn.disabled = current === total-1;
+  }
+
+  function onEnd(el, cb){
+    let done = false;
+    function finish(){
+      if (done) return;
+      done = true;
+      el.removeEventListener('transitionend', handler);
+      clearTimeout(fallback);
+      cb();
+    }
+    function handler(e){
+      if (e.target !== el || e.propertyName !== 'transform') return;
+      finish();
+    }
+    el.addEventListener('transitionend', handler);
+    const fallback = setTimeout(finish, 800);
+  }
+
+  function goNext(){
+    if (animating || current >= total-1) return;
+    animating = true;
+    hintTap.style.display = 'none';
+
+    bottomImg.src = pages[current+1];
+    setInstant(bottomEl, 0, 4);
+    setInstant(topEl, 0, 6);
+
+    requestAnimationFrame(function(){
+      topEl.classList.add('flipping');
+      requestAnimationFrame(function(){
+        topEl.style.transform = 'rotateY(-180deg)';
+      });
+    });
+
+    onEnd(topEl, function(){
+      current += 1;
+      topEl.classList.remove('flipping');
+      setInstant(topEl, -180, 4);
+      setInstant(bottomEl, 0, 6);
+      const t = topEl, ti = topImg;
+      topEl = bottomEl; topImg = bottomImg;
+      bottomEl = t; bottomImg = ti;
+      render();
+      animating = false;
+    });
+  }
+
+  function goPrev(){
+    if (animating || current <= 0) return;
+    animating = true;
+    hintTap.style.display = 'none';
+
+    bottomImg.src = pages[current-1];
+    setInstant(bottomEl, -180, 6);
+    setInstant(topEl, 0, 4);
+
+    requestAnimationFrame(function(){
+      bottomEl.classList.add('flipping');
+      requestAnimationFrame(function(){
+        bottomEl.style.transform = 'rotateY(0deg)';
+      });
+    });
+
+    onEnd(bottomEl, function(){
+      current -= 1;
+      bottomEl.classList.remove('flipping');
+      setInstant(bottomEl, 0, 6);
+      setInstant(topEl, 0, 4);
+      const t = topEl, ti = topImg;
+      topEl = bottomEl; topImg = bottomImg;
+      bottomEl = t; bottomImg = ti;
+      render();
+      animating = false;
+    });
+  }
+
+  function goTo(idx){
+    if (animating || idx === current || idx < 0 || idx >= total) return;
+    current = idx;
+    topImg.src = pages[current];
+    render();
+  }
+
+  prevBtn.addEventListener('click', goPrev);
+  nextBtn.addEventListener('click', goNext);
+  document.getElementById('edgeLeft').addEventListener('click', goPrev);
+  document.getElementById('edgeRight').addEventListener('click', goNext);
+
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'ArrowRight') goNext();
+    if (e.key === 'ArrowLeft') goPrev();
+    if (e.key === 'Escape') closeGrid();
+  });
+
+  // touch swipe
+  let touchStartX = null;
+  stage.addEventListener('touchstart', function(e){ touchStartX = e.touches[0].clientX; }, {passive:true});
+  stage.addEventListener('touchend', function(e){
+    if (touchStartX === null) return;
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if (dx < -40) goNext();
+    else if (dx > 40) goPrev();
+    touchStartX = null;
+  }, {passive:true});
+
+  // fullscreen
+  document.getElementById('fsBtn').addEventListener('click', function(){
+    if (!document.fullscreenElement){
+      document.documentElement.requestFullscreen().catch(()=>{});
+    } else {
+      document.exitFullscreen();
+    }
+    setTimeout(sizeBook, 300);
+  });
+
+  // grid overview
+  const gridOverlay = document.getElementById('gridOverlay');
+  const gridWrap = document.getElementById('gridWrap');
+  function buildGrid(){
+    gridWrap.innerHTML = '';
+    pages.forEach(function(src, i){
+      const item = document.createElement('div');
+      item.className = 'grid-item';
+      const img = document.createElement('img');
+      img.src = src;
+      img.loading = 'lazy';
+      const num = document.createElement('div');
+      num.className = 'num';
+      num.textContent = 'Hal. ' + (i+1);
+      item.appendChild(img);
+      item.appendChild(num);
+      item.addEventListener('click', function(){
+        goTo(i);
+        closeGrid();
+      });
+      gridWrap.appendChild(item);
+    });
+  }
+  function openGrid(){ buildGrid(); gridOverlay.classList.add('open'); }
+  function closeGrid(){ gridOverlay.classList.remove('open'); }
+  document.getElementById('gridBtn').addEventListener('click', openGrid);
+  document.getElementById('closeGrid').addEventListener('click', closeGrid);
+
+  setTimeout(function(){ if(!animating) hintTap.style.opacity='0.75'; }, 400);
+
+  initLayers();
+  render();
+  sizeBook();
+})();
+</script>
+</body>
+</html>
