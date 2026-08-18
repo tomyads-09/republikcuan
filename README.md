@@ -1,6 +1,6 @@
 # Republik Cuan — Website (v1, Tahap Awal)
 
-Situs statis (HTML/CSS/JS murni — tanpa framework/build tool) untuk **republikcuan.web.id**.
+Situs statis (HTML/CSS/JS murni — tanpa framework/build tool) untuk **republikcuan.biz.id**.
 Siap diunggah langsung ke GitHub lalu di-deploy ke Netlify.
 
 ## 📁 Struktur Folder
@@ -56,7 +56,7 @@ yang sama supaya semua halaman otomatis ikut berubah).
 
 1. Push folder `site/` ini ke repo GitHub kamu (root repo = isi folder `site/`).
 2. Hubungkan repo ke Netlify → build command kosong, publish directory `.` (sudah diatur di `netlify.toml`).
-3. Arahkan domain `republikcuan.web.id` (dibeli di Domainesia) ke Netlify lewat Cloudflare DNS.
+3. Arahkan domain `republikcuan.biz.id` (dibeli di Domainesia) ke Netlify lewat Cloudflare DNS.
 4. Setelah live, submit `sitemap.xml` ke Google Search Console.
 
 ## ⚠️ Yang Masih Perlu Kamu Lengkapi Sebelum Go-Live

@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://republikcuan.web.id/sitemap.xml
+Sitemap: https://republikcuan.biz.id/sitemap.xml
