@@ -286,7 +286,7 @@ button{font-family:inherit}
 .page-hero{background:var(--grad-dusk);color:#fff;padding:48px 0 64px}
 .page-hero h1{color:#fff;font-size:clamp(1.8rem,3.6vw,2.6rem)}
 .page-hero p{color:#CBD7EF;max-width:600px}
-.breadcrumb{display:flex;gap:8px;align-items:center;font-size:.85rem;color:#9FB0D2;margin-bottom:16px}
+.breadcrumb{display:flex;gap:8px;align-items:center;font-size:.85rem;color:#E8EDFB;margin-bottom:16px}
 .breadcrumb a:hover{color:#fff}
 
 /* =================== SIDEBAR / FILTERS =================== */
