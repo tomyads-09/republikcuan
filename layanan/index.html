@@ -453,5 +453,109 @@
   <div class="container footer-bottom"><span>© <span data-year></span> Republik Cuan. Semua hak dilindungi.</span></div>
 </footer>
 <script src="../assets/js/main.js"></script>
+<!-- ============================================
+     WIDGET CHAT RC LEGAL — tempel blok ini SEBELUM tag </body>
+     di file layanan/index.html
+     ============================================ -->
+<style>
+  #rcl-fab{
+    position:fixed;bottom:22px;right:22px;z-index:200;
+    width:60px;height:60px;border-radius:50%;
+    background:linear-gradient(135deg,#0EA152,#0A1B33);
+    border:none;box-shadow:0 8px 20px rgba(10,27,51,.3);
+    cursor:pointer;display:flex;align-items:center;justify-content:center;
+    font-size:26px;color:#fff;
+  }
+  #rcl-panel{
+    position:fixed;bottom:96px;right:22px;z-index:200;
+    width:340px;max-width:calc(100vw - 40px);height:440px;max-height:70vh;
+    background:#fff;border-radius:18px;box-shadow:0 20px 50px rgba(10,27,51,.25);
+    display:none;flex-direction:column;overflow:hidden;
+    font-family:'Inter',sans-serif;
+  }
+  #rcl-panel.open{display:flex}
+  #rcl-head{background:#0A1B33;color:#fff;padding:14px 16px;font-weight:700;font-size:.95rem;display:flex;justify-content:space-between;align-items:center}
+  #rcl-head button{background:none;border:none;color:#fff;font-size:18px;cursor:pointer;opacity:.8}
+  #rcl-chat{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:8px;background:#F7F8FA}
+  .rcl-msg{max-width:85%;padding:9px 12px;border-radius:14px;font-size:.85rem;line-height:1.45;white-space:pre-wrap}
+  .rcl-msg.ai{align-self:flex-start;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+  .rcl-msg.user{align-self:flex-end;background:#1D4FD8;color:#fff}
+  #rcl-inputbar{display:flex;gap:8px;padding:10px;border-top:1px solid #eee;background:#fff}
+  #rcl-input{flex:1;border:1px solid #ddd;border-radius:20px;padding:9px 14px;font-size:.85rem;font-family:inherit}
+  #rcl-send{background:#0EA152;border:none;color:#fff;width:36px;height:36px;border-radius:50%;cursor:pointer;flex-shrink:0}
+</style>
+
+<button id="rcl-fab" aria-label="Tanya soal paket legalitas">💬</button>
+<div id="rcl-panel">
+  <div id="rcl-head">
+    <span>Tanya Paket Legalitas</span>
+    <button id="rcl-close" aria-label="Tutup">✕</button>
+  </div>
+  <div id="rcl-chat">
+    <div class="rcl-msg ai">Halo! 👋 Mau tanya soal paket legalitas RC Legal (PT, CV, izin, sertifikasi, dll)? Tanya aja di sini.</div>
+  </div>
+  <div id="rcl-inputbar">
+    <input id="rcl-input" placeholder="Tulis pertanyaanmu...">
+    <button id="rcl-send" aria-label="Kirim">➤</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  const fab = document.getElementById('rcl-fab');
+  const panel = document.getElementById('rcl-panel');
+  const closeBtn = document.getElementById('rcl-close');
+  const chat = document.getElementById('rcl-chat');
+  const input = document.getElementById('rcl-input');
+  const sendBtn = document.getElementById('rcl-send');
+  let history = [];
+
+  fab.addEventListener('click', () => panel.classList.toggle('open'));
+  closeBtn.addEventListener('click', () => panel.classList.remove('open'));
+
+  function addMsg(role, text){
+    const div = document.createElement('div');
+    div.className = 'rcl-msg ' + (role === 'user' ? 'user' : 'ai');
+    div.textContent = text;
+    chat.appendChild(div);
+    chat.scrollTop = chat.scrollHeight;
+  }
+
+  async function send(){
+    const text = input.value.trim();
+    if(!text) return;
+    addMsg('user', text);
+    history.push({role:'user', content:text});
+    input.value = '';
+    sendBtn.disabled = true;
+    addMsg('ai', '...');
+    const typingEl = chat.lastElementChild;
+
+    try {
+      const res = await fetch('/.netlify/functions/chat-legal', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({messages: history})
+      });
+      const data = await res.json();
+      typingEl.remove();
+      if(!res.ok || data.error){
+        addMsg('ai', 'Waduh, ada gangguan. Coba lagi atau WA kami langsung ya.');
+      } else {
+        addMsg('ai', data.reply);
+        history.push({role:'assistant', content:data.reply});
+      }
+    } catch(e){
+      typingEl.remove();
+      addMsg('ai', 'Koneksi bermasalah. Coba lagi ya.');
+    } finally {
+      sendBtn.disabled = false;
+    }
+  }
+
+  sendBtn.addEventListener('click', send);
+  input.addEventListener('keydown', (e) => { if(e.key === 'Enter') send(); });
+})();
+</script>
 </body>
 </html>
