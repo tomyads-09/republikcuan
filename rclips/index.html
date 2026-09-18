@@ -49,8 +49,14 @@
   .rc-wordmark{
     font-family:var(--font-display, 'Sora', sans-serif);
     font-weight:800; font-size:19px; color:#fff; letter-spacing:-0.01em;
+    line-height:1.1;
   }
   .rc-wordmark em{font-style:normal; color:var(--rc-accent);}
+  .rc-wordmark-sub{
+    display:block; font-family:var(--font-body, 'Inter', sans-serif);
+    font-weight:500; font-size:10.5px; color:var(--rc-text-soft);
+    letter-spacing:0.01em; margin-top:1px;
+  }
 
   .rc-feed{
     height:100dvh; height:100vh;
@@ -125,8 +131,52 @@
     width:44px; height:44px; border-radius:50%;
     background:rgba(255,255,255,0.12);
     display:flex; align-items:center; justify-content:center; font-size:19px;
+    transition:background 0.15s, transform 0.1s;
   }
+  .rc-rail-btn:active .rc-rail-icon{transform:scale(0.9);}
+  .rc-rail-btn.active .rc-rail-icon{background:var(--rc-accent); color:#0A1B33;}
+  .rc-rail-btn.active-dislike .rc-rail-icon{background:#8B94A8; color:#0A1B33;}
   .rc-rail-label{font-size:10.5px; color:var(--rc-text-soft);}
+
+  .rc-comment-sheet{
+    position:fixed; left:0; right:0; bottom:0; z-index:60;
+    background:var(--rc-surface); border-radius:18px 18px 0 0;
+    max-height:70vh; display:flex; flex-direction:column;
+    transform:translateY(100%); transition:transform 0.25s ease;
+    box-shadow:0 -10px 40px rgba(0,0,0,0.4);
+  }
+  .rc-comment-sheet.open{transform:translateY(0);}
+  .rc-comment-head{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px 16px; border-bottom:1px solid rgba(255,255,255,0.08);
+    color:#fff; font-weight:700; font-family:var(--font-display, 'Sora', sans-serif);
+  }
+  .rc-comment-close{background:none; border:none; color:var(--rc-text-soft); font-size:20px; cursor:pointer;}
+  .rc-comment-list{flex:1; overflow-y:auto; padding:10px 16px;}
+  .rc-comment-item{
+    padding:9px 0; border-bottom:1px solid rgba(255,255,255,0.06);
+    color:#EFF2F9; font-size:13.5px; line-height:1.5;
+  }
+  .rc-comment-empty{color:var(--rc-text-soft); font-size:13px; text-align:center; padding:24px 0;}
+  .rc-comment-form{
+    display:flex; gap:8px; padding:12px 16px calc(12px + env(safe-area-inset-bottom, 0px));
+    border-top:1px solid rgba(255,255,255,0.08);
+  }
+  .rc-comment-input{
+    flex:1; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.14);
+    border-radius:999px; padding:9px 14px; color:#fff; font-size:13.5px; font-family:inherit;
+  }
+  .rc-comment-input::placeholder{color:var(--rc-text-soft);}
+  .rc-comment-send{
+    background:var(--rc-accent); color:#0A1B33; border:none; border-radius:999px;
+    padding:9px 16px; font-weight:700; font-size:13px; cursor:pointer; font-family:inherit;
+  }
+  .rc-comment-website{position:absolute; left:-9999px; width:1px; height:1px; opacity:0;}
+  .rc-sheet-backdrop{
+    position:fixed; inset:0; z-index:59; background:rgba(0,0,0,0.5);
+    opacity:0; pointer-events:none; transition:opacity 0.25s ease;
+  }
+  .rc-sheet-backdrop.open{opacity:1; pointer-events:auto;}
 
   .rc-progress{
     position:fixed; top:0; left:0; right:0; height:2.5px; z-index:41;
@@ -155,9 +205,10 @@
 
 <div class="rc-topbar">
   <a href="../index.html" class="rc-back" aria-label="Kembali ke beranda">←</a>
-  <span class="rc-wordmark">RCl<em>ip</em>s</span>
+  <span class="rc-wordmark">RCl<em>ip</em>s<span class="rc-wordmark-sub">Short video from YouTube</span></span>
 </div>
 
+<div class="rc-sheet-backdrop" id="rcBackdrop"></div>
 <main class="rc-feed" id="rcFeed" aria-label="Feed video pendek RClips"></main>
 
 <template id="rc-slide-template">
@@ -167,9 +218,17 @@
       <button class="rc-mute-btn" aria-label="Nyalakan/matikan suara">🔇</button>
     </div>
     <div class="rc-side-rail">
-      <button class="rc-rail-btn rc-open-yt" aria-label="Buka di YouTube">
-        <span class="rc-rail-icon">▶</span>
-        <span class="rc-rail-label">YouTube</span>
+      <button class="rc-rail-btn rc-like" aria-label="Suka">
+        <span class="rc-rail-icon">👍</span>
+        <span class="rc-rail-label rc-like-count">0</span>
+      </button>
+      <button class="rc-rail-btn rc-dislike" aria-label="Tidak suka">
+        <span class="rc-rail-icon">👎</span>
+        <span class="rc-rail-label rc-dislike-count">0</span>
+      </button>
+      <button class="rc-rail-btn rc-comment-btn" aria-label="Komentar">
+        <span class="rc-rail-icon">💬</span>
+        <span class="rc-rail-label rc-comment-count">0</span>
       </button>
       <button class="rc-rail-btn rc-share" aria-label="Bagikan">
         <span class="rc-rail-icon">↗</span>
@@ -184,6 +243,19 @@
   </section>
 </template>
 
+<div class="rc-comment-sheet" id="rcCommentSheet">
+  <div class="rc-comment-head">
+    <span>Komentar</span>
+    <button class="rc-comment-close" id="rcCommentClose" aria-label="Tutup">✕</button>
+  </div>
+  <div class="rc-comment-list" id="rcCommentList"></div>
+  <form class="rc-comment-form" id="rcCommentForm">
+    <input type="text" class="rc-comment-website" id="rcWebsiteHoneypot" tabindex="-1" autocomplete="off" placeholder="Jangan diisi">
+    <input type="text" class="rc-comment-input" id="rcCommentInput" placeholder="Tulis komentar…" maxlength="280">
+    <button type="submit" class="rc-comment-send">Kirim</button>
+  </form>
+</div>
+
 <script src="videos_data.js"></script>
 <script>
 (function(){
@@ -197,7 +269,75 @@
     return;
   }
 
+  const API = '/.netlify/functions/rclips-react';
+  const REACT_KEY = 'rclips_reactions'; // localStorage: {videoId: 'like'|'dislike'}
+  function getLocalReactions(){
+    try { return JSON.parse(localStorage.getItem(REACT_KEY) || '{}'); } catch(e) { return {}; }
+  }
+  function setLocalReaction(videoId, val){
+    try {
+      const r = getLocalReactions();
+      if (val) r[videoId] = val; else delete r[videoId];
+      localStorage.setItem(REACT_KEY, JSON.stringify(r));
+    } catch(e) {}
+  }
+
   let userMuted = true;
+  let commentSheetVideoId = null;
+  const commentSheet = document.getElementById('rcCommentSheet');
+  const commentBackdrop = document.getElementById('rcBackdrop');
+  const commentList = document.getElementById('rcCommentList');
+  const commentForm = document.getElementById('rcCommentForm');
+  const commentInput = document.getElementById('rcCommentInput');
+  const commentHoneypot = document.getElementById('rcWebsiteHoneypot');
+
+  function openCommentSheet(videoId, comments){
+    commentSheetVideoId = videoId;
+    renderComments(comments || []);
+    commentSheet.classList.add('open');
+    commentBackdrop.classList.add('open');
+  }
+  function closeCommentSheet(){
+    commentSheet.classList.remove('open');
+    commentBackdrop.classList.remove('open');
+    commentSheetVideoId = null;
+  }
+  document.getElementById('rcCommentClose').addEventListener('click', closeCommentSheet);
+  commentBackdrop.addEventListener('click', closeCommentSheet);
+
+  function renderComments(comments){
+    if (!comments.length) {
+      commentList.innerHTML = '<div class="rc-comment-empty">Belum ada komentar. Jadi yang pertama!</div>';
+      return;
+    }
+    commentList.innerHTML = '';
+    comments.forEach(c => {
+      const div = document.createElement('div');
+      div.className = 'rc-comment-item';
+      div.textContent = c.text; // textContent = aman dari HTML/script injection
+      commentList.appendChild(div);
+    });
+  }
+
+  commentForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const text = commentInput.value.trim();
+    if (!text || !commentSheetVideoId) return;
+    commentInput.value = '';
+    try {
+      const res = await fetch(API, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ videoId: commentSheetVideoId, action: 'comment', text, website: commentHoneypot.value })
+      });
+      const data = await res.json();
+      if (data.comments) {
+        renderComments(data.comments);
+        const slide = feed.querySelector(`.rc-slide[data-video-id="${commentSheetVideoId}"]`);
+        if (slide) slide.querySelector('.rc-comment-count').textContent = data.comments.length;
+      }
+    } catch(e) { console.error('Gagal kirim komentar:', e); }
+  });
 
   videos.forEach((v, idx) => {
     const node = tpl.content.cloneNode(true);
@@ -207,15 +347,31 @@
     node.querySelector('.rc-cat-pill').textContent = v.category || 'RClips';
     node.querySelector('.rc-caption').textContent = v.caption || '';
     node.querySelector('.rc-credit').textContent = v.credit || 'Sumber: YouTube';
-    node.querySelector('.rc-open-yt').addEventListener('click', () => {
-      window.open('https://www.youtube.com/watch?v=' + v.id, '_blank', 'noopener');
+
+    const likeBtn = node.querySelector('.rc-like');
+    const dislikeBtn = node.querySelector('.rc-dislike');
+    const localReaction = getLocalReactions()[v.id];
+    if (localReaction === 'like') likeBtn.classList.add('active');
+    if (localReaction === 'dislike') dislikeBtn.classList.add('active-dislike');
+
+    likeBtn.addEventListener('click', () => reactTo(v.id, 'like', slide));
+    dislikeBtn.addEventListener('click', () => reactTo(v.id, 'dislike', slide));
+
+    node.querySelector('.rc-comment-btn').addEventListener('click', async () => {
+      openCommentSheet(v.id, []);
+      try {
+        const res = await fetch(`${API}?videoId=${encodeURIComponent(v.id)}`);
+        const data = await res.json();
+        if (commentSheetVideoId === v.id) renderComments(data.comments || []);
+      } catch(e) { console.error('Gagal ambil komentar:', e); }
     });
+
     node.querySelector('.rc-share').addEventListener('click', async () => {
       const url = location.origin + location.pathname + '#' + v.id;
       if (navigator.share) {
         try { await navigator.share({ title: 'RClips — Republik Cuan', url }); } catch(e) {}
       } else {
-        try { await navigator.clipboard.writeText(url); alert('Link disalin!'); } catch(e) {}
+        try { await navigator.clipboard.writeText(url); alert('Link disalin! Bisa langsung ditempel ke status Facebook / WhatsApp.'); } catch(e) {}
       }
     });
     node.querySelector('.rc-mute-btn').addEventListener('click', (e) => {
@@ -225,7 +381,64 @@
       if (iframe) loadOrUpdateIframe(slide, v.id, true);
     });
     feed.appendChild(node);
+
+    // muat statistik like/dislike/comment count awal
+    fetch(`${API}?videoId=${encodeURIComponent(v.id)}`)
+      .then(r => r.json())
+      .then(data => {
+        slide.querySelector('.rc-like-count').textContent = data.likes || 0;
+        slide.querySelector('.rc-dislike-count').textContent = data.dislikes || 0;
+        slide.querySelector('.rc-comment-count').textContent = (data.comments || []).length;
+      })
+      .catch(() => {});
   });
+
+  async function reactTo(videoId, type, slide){
+    const current = getLocalReactions()[videoId]; // 'like' | 'dislike' | undefined
+    const likeBtn = slide.querySelector('.rc-like');
+    const dislikeBtn = slide.querySelector('.rc-dislike');
+    const likeCountEl = slide.querySelector('.rc-like-count');
+    const dislikeCountEl = slide.querySelector('.rc-dislike-count');
+
+    let action;
+    let nextState;
+    if (current === type) {
+      // klik ulang -> batalkan reaksi
+      action = type === 'like' ? 'unlike' : 'undislike';
+      nextState = null;
+    } else {
+      action = type;
+      nextState = type;
+      // kalau sebelumnya reaksi beda (like->dislike / sebaliknya), batalkan yang lama dulu
+      if (current) {
+        await postReaction(videoId, current === 'like' ? 'unlike' : 'undislike');
+      }
+    }
+
+    setLocalReaction(videoId, nextState);
+    likeBtn.classList.toggle('active', nextState === 'like');
+    dislikeBtn.classList.toggle('active-dislike', nextState === 'dislike');
+
+    const data = await postReaction(videoId, action);
+    if (data) {
+      likeCountEl.textContent = data.likes || 0;
+      dislikeCountEl.textContent = data.dislikes || 0;
+    }
+  }
+
+  async function postReaction(videoId, action){
+    try {
+      const res = await fetch(API, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ videoId, action })
+      });
+      return await res.json();
+    } catch(e) {
+      console.error('Gagal kirim reaksi:', e);
+      return null;
+    }
+  }
 
   // progress dots
   videos.forEach((_, i) => {
