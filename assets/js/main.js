@@ -22,16 +22,20 @@ document.addEventListener('DOMContentLoaded', function () {
   // Filter pills (artikel listing) — client-side show/hide by data-cat
   var pills = document.querySelectorAll('.pill[data-filter]');
   var cards = document.querySelectorAll('[data-cat]');
+  var emptyState = document.getElementById('article-empty-state');
   if (pills.length && cards.length) {
     pills.forEach(function (pill) {
       pill.addEventListener('click', function () {
         pills.forEach(function (p) { p.classList.remove('active'); });
         pill.classList.add('active');
         var filter = pill.getAttribute('data-filter');
+        var visibleCount = 0;
         cards.forEach(function (card) {
           var show = filter === 'semua' || card.getAttribute('data-cat') === filter;
           card.style.display = show ? '' : 'none';
+          if (show) visibleCount++;
         });
+        if (emptyState) emptyState.style.display = visibleCount === 0 ? '' : 'none';
       });
     });
   }
