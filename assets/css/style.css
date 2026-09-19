@@ -319,6 +319,16 @@ button{font-family:inherit}
   border-radius:12px;padding:18px 20px;margin:24px 0;font-size:.96rem
 }
 .callout b{color:var(--green-600)}
+.quote-dalil{
+  background:var(--bg-alt);border-left:4px solid var(--navy-900);
+  border-radius:12px;padding:20px 24px;margin:24px 0;font-style:italic;color:var(--ink-soft)
+}
+.quote-dalil cite{display:block;margin-top:10px;font-style:normal;font-weight:700;font-size:.82rem;color:var(--navy-900);letter-spacing:.02em}
+.story-box{
+  background:linear-gradient(160deg,rgba(29,79,216,.06),rgba(242,118,14,.06));
+  border:1px solid var(--border);border-radius:var(--r-md);padding:22px 24px;margin:28px 0
+}
+.story-box h3{margin-top:0}
 .toc{background:var(--bg-alt);border-radius:var(--r-md);padding:20px 24px;margin:28px 0}
 .toc h2{font-family:var(--font-mono);font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:12px}
 .toc a{display:block;padding:5px 0;font-size:.92rem;color:var(--blue-600)}
