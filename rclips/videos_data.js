@@ -36,116 +36,115 @@ const RCLIPS_VIDEOS = [
     caption: "Real or AI?",
     credit: "Sumber: YouTube Shorts"
   },
-
-  // ↓↓↓ TEMPEL VIDEO BARU KAMU DI BAWAH SINI (copy format di atas) ↓↓↓
-
   {
     id: "nGbDOmV3H1g",
-    category: "Kisah Sukses",
-    caption: "Mulai dari Nol, Kini Raih Cuan Jutaan per Bulan",
+    category: "Bisnis Sampingan",
+    caption: "Butuh Modal Berapa buat Buka Warung",
     credit: "Sumber: YouTube Shorts"
   },
   {
     id: "0Mg0beXXc9Q",
     category: "Bisnis Sampingan",
-    caption: "Ide Usaha Sampingan Modal Kecil, Untung Besar",
+    caption: "Jualan sambil Bikin Konten",
     credit: "Sumber: YouTube Shorts"
   },
   {
     id: "Ir-NEFEuqW4",
-    category: "Freelance & Kerja Remote",
-    caption: "Trik Dapat Klien Freelance Pertama dengan Cepat",
+    category: "Bisnis Sampingan",
+    caption: "Jualan dari Rumah Bisa Banget",
     credit: "Sumber: YouTube Shorts"
   },
   {
     id: "wpk2akRPVnA",
-    category: "AI & Otomatisasi",
-    caption: "Manfaatkan AI Biar Kerja Makin Cepat & Cuan",
+    category: "Motivasi & Religi",
+    caption: "Do'a Keselamatan Dunia Akhirat",
     credit: "Sumber: YouTube Shorts"
   },
   {
     id: "dZqj6vSJ64o",
-    category: "Aplikasi Penghasil Uang",
-    caption: "Aplikasi Ini Bisa Bikin Kamu Cuan Tambahan",
+    category: "Tips Bisnis",
+    caption: "Yang Harus Dilakukan Ketika Memulai Usaha",
     credit: "Sumber: YouTube Shorts"
   },
   {
     id: "OWow0hdZs5g",
-    category: "Tips Keuangan",
-    caption: "Cara Atur Gaji Biar Nggak Numpang Lewat",
+    category: "Tips Bisnis",
+    caption: "Lakukan 2 Hal agar Usaha Sukses",
     credit: "Sumber: YouTube Shorts"
   },
   {
     id: "DlZSk5AqPy4",
-    category: "Investasi Pemula",
-    caption: "Mulai Investasi dari Uang Receh, Ini Caranya",
+    category: "Motivasi & Religi",
+    caption: "Bisnis buat Apa? Ustad Adi Hidayat",
     credit: "Sumber: YouTube Shorts"
   },
   {
     id: "OTgti4QZaVU",
-    category: "Motivasi",
-    caption: "Jangan Nunggu Sempurna, Mulai Aja Dulu",
+    category: "Tips Bisnis",
+    caption: "Buat Kalian yang Bingung Mau Mulai Bisnis",
     credit: "Sumber: YouTube Shorts"
   },
   {
     id: "hmiU58ZjZ6E",
     category: "Kisah Sukses",
-    caption: "Rahasia Sukses Jualan Online dari Kamar Kos",
+    caption: "Timothy Ronald: Bisnis Apa Aja Bisa!",
     credit: "Sumber: YouTube Shorts"
   },
   {
     id: "q4vo6U8UGmc",
-    category: "Bisnis Sampingan",
-    caption: "Bisnis Sampingan Ini Jalan Sambil Kerja Kantoran",
+    category: "Motivasi & Religi",
+    caption: "Ustad Adi Hidayat: Pendosa Ingin Hijrah",
     credit: "Sumber: YouTube Shorts"
   },
   {
     id: "NBzFnIcmB1k",
-    category: "Freelance & Kerja Remote",
-    caption: "Kerja Remote dari Rumah, Ini Skill yang Dibutuhkan",
+    category: "Motivasi & Religi",
+    caption: "Ternyata Bahagia itu Sederhana Sekali",
     credit: "Sumber: YouTube Shorts"
   },
   {
     id: "Os8aRcVHxJE",
-    category: "AI & Otomatisasi",
-    caption: "AI Bikin Konten Otomatis, Begini Caranya",
+    category: "Motivasi & Religi",
+    caption: "Sedekah Ga Akan Kamu Buat Miskin",
     credit: "Sumber: YouTube Shorts"
   },
   {
     id: "S4fYgDEe9DA",
-    category: "Tips Keuangan",
-    caption: "Kesalahan Keuangan yang Bikin Susah Nabung",
+    category: "Tutorial",
+    caption: "Tutorial Jualan di Lynk.id",
     credit: "Sumber: YouTube Shorts"
   },
   {
     id: "6w5wtdZsLq0",
-    category: "Aplikasi Penghasil Uang",
-    caption: "Coba Aplikasi Ini Buat Nambah Penghasilan",
+    category: "Ide Bisnis",
+    caption: "Bisnis yang Bagus 2026",
     credit: "Sumber: YouTube Shorts"
   },
   {
     id: "sqFM2oehtk8",
-    category: "Motivasi",
-    caption: "Konsisten Itu Kunci Biar Usaha Nggak Berhenti",
+    category: "Bisnis Kuliner",
+    caption: "Buka Bisnis Kuliner Apakah Masih Worth It",
     credit: "Sumber: YouTube Shorts"
   },
   {
     id: "wagVQ5niTvA",
-    category: "Kisah Sukses",
-    caption: "Dari Karyawan Jadi Bos Usaha Sendiri",
+    category: "Motivasi & Religi",
+    caption: "Motivasi Menurut Yusuf Hamka",
     credit: "Sumber: YouTube Shorts"
   },
   {
     id: "TmgMk8gHuIM",
-    category: "Investasi Pemula",
-    caption: "Investasi Aman Buat Pemula, Ini Tipsnya",
+    category: "Motivasi & Religi",
+    caption: "Wong Lanang Wajib Usaha",
     credit: "Sumber: YouTube Shorts"
   },
   {
     id: "negdhGGjSeg",
     category: "Bisnis Sampingan",
-    caption: "Ide Cuan dari Hobi yang Sering Diremehkan",
+    caption: "Usaha Rumahan yang Menghasilkan",
     credit: "Sumber: YouTube Shorts"
   },
+
+  // ↓↓↓ TEMPEL VIDEO BARU KAMU DI BAWAH SINI (copy format di atas) ↓↓↓
 
 ];
