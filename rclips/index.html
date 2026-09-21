@@ -198,6 +198,26 @@
   @media (min-width:900px){
     .rc-player-wrap{height:min(84vh, 800px);}
   }
+
+  .rc-nav-arrows{
+    position:fixed; right:14px; top:50%; transform:translateY(-50%); z-index:41;
+    display:flex; flex-direction:column; gap:10px;
+  }
+  .rc-nav-btn{
+    width:42px; height:42px; border-radius:50%; border:1px solid rgba(255,255,255,0.16);
+    background:rgba(15,39,72,0.72); color:#fff; font-size:18px; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
+    transition:opacity 0.15s, transform 0.1s, background 0.15s;
+    box-shadow:0 4px 14px rgba(0,0,0,0.3);
+  }
+  .rc-nav-btn:hover{background:rgba(255,138,30,0.85);}
+  .rc-nav-btn:active{transform:scale(0.92);}
+  .rc-nav-btn[disabled]{opacity:0.25; pointer-events:none;}
+  @media (max-width:640px){
+    .rc-nav-arrows{right:8px; gap:8px;}
+    .rc-nav-btn{width:38px; height:38px; font-size:16px;}
+  }
 </style>
 <link rel="icon" href="../assets/icons/favicon-32.png" sizes="32x32">
 <link rel="icon" href="../assets/icons/favicon-16.png" sizes="16x16">
@@ -214,6 +234,11 @@
 
 <div class="rc-sheet-backdrop" id="rcBackdrop"></div>
 <main class="rc-feed" id="rcFeed" aria-label="Feed video pendek RClips"></main>
+
+<div class="rc-nav-arrows">
+  <button class="rc-nav-btn" id="rcNavUp" aria-label="Video sebelumnya">▲</button>
+  <button class="rc-nav-btn" id="rcNavDown" aria-label="Video selanjutnya">▼</button>
+</div>
 
 <template id="rc-slide-template">
   <section class="rc-slide" data-video-id="">
@@ -266,7 +291,8 @@
   const feed = document.getElementById('rcFeed');
   const tpl = document.getElementById('rc-slide-template');
   const progressBar = document.getElementById('rcProgress');
-  const videos = (typeof RCLIPS_VIDEOS !== 'undefined') ? RCLIPS_VIDEOS : [];
+  // Video terbaru (paling bawah di videos_data.js) tampil duluan, gaya feed FB/Shorts
+  const videos = (typeof RCLIPS_VIDEOS !== 'undefined') ? RCLIPS_VIDEOS.slice().reverse() : [];
 
   if (!videos.length) {
     feed.innerHTML = '<div class="rc-slide"><div class="rc-empty">Belum ada video di sini. Tambahin video pertama kamu lewat file <code>rclips/videos_data.js</code>. <br><br><a href="../index.html">← Kembali ke beranda</a></div></div>';
@@ -476,6 +502,15 @@
   const slides = Array.from(feed.querySelectorAll('.rc-slide'));
   const dots = Array.from(progressBar.children);
 
+  let currentIndex = 0;
+  const navUp = document.getElementById('rcNavUp');
+  const navDown = document.getElementById('rcNavDown');
+
+  function updateNavButtons(){
+    navUp.disabled = currentIndex <= 0;
+    navDown.disabled = currentIndex >= slides.length - 1;
+  }
+
   const io = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       const slide = entry.target;
@@ -484,11 +519,21 @@
         loadOrUpdateIframe(slide, slide.dataset.videoId, false);
         dots.forEach((d, i) => d.classList.toggle('active', i === idx));
         slides.forEach(s => { if (s !== slide) pauseSlide(s); });
+        currentIndex = idx;
+        updateNavButtons();
       }
     });
   }, { threshold: [0, 0.6, 1] });
 
   slides.forEach(s => io.observe(s));
+
+  navUp.addEventListener('click', () => {
+    if (currentIndex > 0) slides[currentIndex - 1].scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+  navDown.addEventListener('click', () => {
+    if (currentIndex < slides.length - 1) slides[currentIndex + 1].scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+  updateNavButtons();
 })();
 </script>
 
