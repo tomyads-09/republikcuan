@@ -214,70 +214,32 @@
         <a href="artikel/" class="btn btn-outline btn-sm">Semua Artikel →</a>
       </div>
 
-      <div class="article-grid">
-        <!-- Featured -->
-        <a href="artikel/10-cara-menghasilkan-uang-dari-rumah-2026.html" class="article-card featured" data-cat="kerja-online">
-          <div class="article-thumb">
-            <span class="article-cat">Kerja Online</span>
-            <img src="https://images.unsplash.com/photo-1643576779741-7febf0b3a925?auto=format&fit=crop&w=800&h=400&q=80" alt="Ilustrasi kerja online dari rumah" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block">
-          </div>
-          <div class="article-body">
-            <h3>10 Cara Menghasilkan Uang dari Rumah Tanpa Modal di 2026</h3>
-            <p>Kumpulan cara realistis yang bisa langsung kamu coba hari ini — dari freelance sampai jual jasa digital, lengkap dengan langkah praktisnya.</p>
-            <div class="article-meta"><span>Kerja Online</span>·<span>8 min baca</span></div>
-          </div>
-        </a>
-
-        <a href="artikel/7-aplikasi-penghasil-uang-aman-terbukti-cair.html" class="article-card" data-cat="aplikasi-cuan">
-          <div class="article-thumb">
-            <span class="article-cat">Aplikasi</span>
-            <img src="https://images.pexels.com/photos/6771899/pexels-photo-6771899.jpeg?auto=compress&cs=tinysrgb&w=800&h=500&fit=crop" alt="Aplikasi penghasil uang di smartphone" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block">
-          </div>
-          <div class="article-body">
-            <h3>7 Aplikasi Cuan Asli dan Aman, Sudah Cair</h3>
-            <p>Daftar aplikasi yang benar-benar membayar penggunanya, plus cara menghindari aplikasi abal-abal.</p>
-            <div class="article-meta"><span>Aplikasi</span>·<span>6 min baca</span></div>
-          </div>
-        </a>
-
-        <a href="artikel/ide-bisnis-sampingan-modal-kecil-karyawan.html" class="article-card" data-cat="ide-bisnis">
-          <div class="article-thumb">
-            <span class="article-cat">Ide Bisnis</span>
-            <img src="https://images.pexels.com/photos/30848031/pexels-photo-30848031.jpeg?auto=compress&cs=tinysrgb&w=800&h=500&fit=crop" alt="Pemilik toko kecil / bisnis sampingan" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block">
-          </div>
-          <div class="article-body">
-            <h3>Ide Ide Bisnis Modal Kecil untuk Karyawan Sibuk</h3>
-            <p>Usaha yang tetap bisa jalan meski waktumu terbatas — cocok dikerjakan malam hari atau akhir pekan.</p>
-            <div class="article-meta"><span>Bisnis</span>·<span>5 min baca</span></div>
-          </div>
-        </a>
-
-        <a href="artikel/cara-kerja-freelance-untuk-pemula.html" class="article-card" data-cat="kerja-online">
-          <div class="article-thumb">
-            <span class="article-cat">Kerja Online</span>
-            <img src="https://images.pexels.com/photos/9052775/pexels-photo-9052775.jpeg?auto=compress&cs=tinysrgb&w=800&h=500&fit=crop" alt="Freelancer bekerja dengan laptop" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block">
-          </div>
-          <div class="article-body">
-            <h3>Cara Kerja Freelance untuk Pemula, Mulai dari Skill Kamu</h3>
-            <p>Panduan langkah demi langkah menemukan niche, membuat portofolio, dan dapat klien pertama.</p>
-            <div class="article-meta"><span>Kerja Online</span>·<span>7 min baca</span></div>
-          </div>
-        </a>
-
-        <a href="artikel/manfaatkan-ai-untuk-nambah-cuan.html" class="article-card" data-cat="tips-ai">
-          <div class="article-thumb">
-            <span class="article-cat">Tips AI</span>
-            <img src="https://images.pexels.com/photos/17484970/pexels-photo-17484970.png?auto=compress&cs=tinysrgb&w=800&h=500&fit=crop" alt="Ilustrasi AI dan otomatisasi" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block">
-          </div>
-          <div class="article-body">
-            <h3>Manfaatkan AI untuk Nambah Cuan: 5 Tools Gratis</h3>
-            <p>Tools AI gratis buat bikin konten, jualan, dan otomatisasi kerja harian biar lebih cepat cuan.</p>
-            <div class="article-meta"><span>AI</span>·<span>6 min baca</span></div>
-          </div>
-        </a>
-      </div>
+      <div class="article-grid" id="artikel-unggulan-grid"></div>
     </div>
   </section>
+
+  <script src="assets/js/articles_data.js"></script>
+  <script>
+    (function () {
+      var grid = document.getElementById('artikel-unggulan-grid');
+      if (!grid || typeof ARTICLES === 'undefined') return;
+      var featured = ARTICLES.slice(0, 5);
+      grid.innerHTML = featured.map(function (a, i) {
+        return '' +
+          '<a href="artikel/' + a.slug + '.html" class="article-card' + (i === 0 ? ' featured' : '') + '" data-cat="' + a.cat + '">' +
+            '<div class="article-thumb">' +
+              '<span class="article-cat">' + a.catLabel + '</span>' +
+              '<img src="' + a.image + '" alt="' + a.imageAlt + '" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block">' +
+            '</div>' +
+            '<div class="article-body">' +
+              '<h3>' + a.title + '</h3>' +
+              '<p>' + a.excerpt + '</p>' +
+              '<div class="article-meta"><span>' + a.catLabel + '</span>·<span>' + a.readTime + ' min baca</span></div>' +
+            '</div>' +
+          '</a>';
+      }).join('');
+    })();
+  </script>
 
   <!-- ============ PROMO APLIKASI ============ -->
   <section class="section-tight">
