@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RC News 24 – Berita Ekonomi &amp; Bisnis Terbaru | Republik Cuan</title>
+<meta name="description" content="RC News 24: berita ekonomi, pasar, dan bisnis terbaru yang diperbarui otomatis dari portal berita terpercaya. Dari Republik Cuan.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://republikcuan.web.id/rc-news-24.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Republik Cuan">
+<meta property="og:title" content="RC News 24 – Berita Ekonomi &amp; Bisnis Terbaru">
+<meta property="og:description" content="Berita ekonomi dan bisnis terbaru, diperbarui otomatis.">
+<meta property="og:image" content="https://republikcuan.web.id/assets/images/logo.png">
+<meta property="og:url" content="https://republikcuan.web.id/rc-news-24.html">
+<link rel="icon" href="/assets/icons/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon.png">
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-MQ8QLQBXRJ"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-MQ8QLQBXRJ');</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: { extend: {
+    colors: { navy: { 900:'#0A1B33', 800:'#0F2748' }, brand: { blue:'#1D4FD8', orange:'#FF8A1E' }, paper:'#F5F7FB' },
+    fontFamily: { display:['Sora','system-ui','sans-serif'], body:['Inter','system-ui','sans-serif'] }
+  } }
+}
+</script>
+<style>
+  body{font-family:'Inter',system-ui,sans-serif}
+  .font-display{font-family:'Sora',system-ui,sans-serif}
+  .clamp-2{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .clamp-3{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+  .ph{background:linear-gradient(135deg,#0F2748,#1D4FD8 60%,#FF8A1E)}
+  @keyframes pulse-dot{0%,100%{opacity:1}50%{opacity:.35}}
+  .live-dot{animation:pulse-dot 1.6s ease-in-out infinite}
+  @media (prefers-reduced-motion:reduce){.live-dot,.animate-pulse,.animate-spin{animation:none!important}}
+  :focus-visible{outline:3px solid #FF8A1E;outline-offset:2px;border-radius:6px}
+</style>
+</head>
+<body class="bg-paper text-slate-800 antialiased">
+
+<a href="#konten" class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:bg-white focus:p-3">Lompat ke konten utama</a>
+
+<!-- HEADER -->
+<header class="sticky top-0 z-40 bg-navy-900 text-white shadow-lg shadow-navy-900/20">
+  <div class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
+    <a href="/rc-news-24.html" class="flex items-center gap-3" aria-label="RC News 24">
+      <span class="grid h-9 w-9 place-items-center rounded-lg bg-brand-orange font-display text-sm font-extrabold text-navy-900">RC</span>
+      <span class="font-display text-lg font-extrabold leading-none sm:text-xl">RC News 24</span>
+      <span class="hidden items-center gap-1.5 rounded-full bg-white/10 px-2.5 py-1 text-xs font-medium sm:inline-flex">
+        <span class="live-dot h-2 w-2 rounded-full bg-emerald-400"></span>Update otomatis
+      </span>
+    </a>
+    <a href="/" class="inline-flex items-center gap-2 rounded-full border border-white/25 px-4 py-2 text-sm font-semibold transition hover:bg-white hover:text-navy-900">
+      <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+      Kembali ke Beranda
+    </a>
+  </div>
+</header>
+
+<main id="konten" class="mx-auto max-w-6xl px-4 pb-16 pt-8">
+
+  <div class="mb-6 flex flex-wrap items-end justify-between gap-2">
+    <div>
+      <h1 class="font-display text-3xl font-extrabold text-navy-900 sm:text-4xl">RC News 24</h1>
+      <p class="mt-1 text-sm text-slate-600">Kabar ekonomi, pasar, dan bisnis terbaru dari portal berita terpercaya.</p>
+    </div>
+    <p id="status" class="text-xs text-slate-500" aria-live="polite"></p>
+  </div>
+
+  <!-- LOADING -->
+  <div id="loading" class="py-16 text-center" role="status">
+    <div class="mx-auto mb-4 h-10 w-10 animate-spin rounded-full border-4 border-slate-200 border-t-brand-blue"></div>
+    <p class="font-display text-lg font-bold text-navy-900">Memuat RC News 24...</p>
+    <p class="mt-1 text-sm text-slate-500">Mengambil berita terbaru, mohon tunggu sebentar.</p>
+  </div>
+
+  <!-- ERROR -->
+  <div id="error" class="hidden rounded-2xl border border-red-200 bg-white p-8 text-center">
+    <p class="font-display text-xl font-bold text-navy-900">Berita belum bisa dimuat</p>
+    <p class="mx-auto mt-2 max-w-md text-sm text-slate-600">Sumber berita sedang tidak merespons atau koneksi Anda terputus. Cek koneksi internet, lalu coba lagi.</p>
+    <button id="retry" class="mt-5 rounded-full bg-brand-blue px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-navy-800">Muat ulang berita</button>
+    <p class="mt-4"><a href="/" class="text-sm font-semibold text-brand-blue underline">Kembali ke Beranda Republik Cuan</a></p>
+  </div>
+
+  <!-- HEADLINE -->
+  <section id="headline" class="hidden" aria-labelledby="hl-title"></section>
+
+  <!-- GRID -->
+  <section id="lainnya" class="mt-12 hidden" aria-labelledby="lain-h">
+    <h2 id="lain-h" class="mb-5 font-display text-2xl font-bold text-navy-900">Berita lainnya</h2>
+    <div id="grid" class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3"></div>
+  </section>
+
+  <p class="mt-14 border-t border-slate-200 pt-6 text-xs leading-relaxed text-slate-500">
+    Berita ditampilkan otomatis dari RSS publik CNBC Indonesia dan Kontan. Seluruh hak cipta judul, ringkasan, dan gambar milik masing-masing penerbit; tombol "Baca Selengkapnya" membuka artikel asli di tab baru. Republik Cuan tidak menyimpan atau mengubah isi berita.
+  </p>
+</main>
+
+<script>
+(function () {
+  /* ====== PENGATURAN (silakan ubah di sini) ====== */
+  var SOURCES = [
+    { name: 'CNBC Indonesia', url: 'https://www.cnbcindonesia.com/market/rss' },
+    { name: 'CNBC Indonesia', url: 'https://www.cnbcindonesia.com/news/rss' },
+    { name: 'Kontan',         url: 'https://investasi.kontan.co.id/rss' },
+    { name: 'Kontan',         url: 'https://keuangan.kontan.co.id/rss' }
+  ];
+  var PROXIES = [
+    function (u) { return 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u); },
+    function (u) { return 'https://corsproxy.io/?' + encodeURIComponent(u); },
+    function (u) { return 'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(u); }
+  ];
+  var TOTAL_CARDS = 12, REFRESH_MS = 5 * 60 * 1000, TIMEOUT_MS = 9000, CACHE_KEY = 'rcnews24_cache_v1';
+
+  var $ = function (id) { return document.getElementById(id); };
+  var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); };
+
+  function fetchText(url) {
+    var i = 0;
+    function next() {
+      if (i >= PROXIES.length) return Promise.reject(new Error('semua proxy gagal'));
+      var ctrl = new AbortController(), t = setTimeout(function () { ctrl.abort(); }, TIMEOUT_MS);
+      return fetch(PROXIES[i++](url), { signal: ctrl.signal })
+        .then(function (r) { clearTimeout(t); if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
+        .then(function (txt) { if (txt.indexOf('<item') === -1 && txt.indexOf('<entry') === -1) throw new Error('bukan RSS'); return txt; })
+        .catch(function () { clearTimeout(t); return next(); });
+    }
+    return next();
+  }
+
+  function textOf(el, tag) { var n = el.getElementsByTagName(tag)[0]; return n ? (n.textContent || '').trim() : ''; }
+  function stripHtml(h) { var d = document.createElement('div'); d.innerHTML = h || ''; return (d.textContent || '').replace(/\s+/g, ' ').trim(); }
+  function pickImage(item) {
+    var out = '';
+    ['enclosure', 'media:content', 'media:thumbnail', 'content', 'thumbnail'].forEach(function (t) {
+      if (out) return;
+      var n = item.getElementsByTagName(t)[0];
+      if (n) { var u = n.getAttribute('url') || ''; var ty = n.getAttribute('type') || ''; if (u && (!ty || ty.indexOf('image') === 0)) out = u; }
+    });
+    if (!out) {
+      var raw = textOf(item, 'description') + textOf(item, 'content:encoded');
+      var m = raw.match(/<img[^>]+src=["']([^"']+)["']/i);
+      if (m) out = m[1];
+    }
+    return out.indexOf('//') === 0 ? 'https:' + out : out;
+  }
+
+  function parseFeed(xml, source) {
+    var doc = new DOMParser().parseFromString(xml, 'text/xml');
+    return Array.prototype.slice.call(doc.getElementsByTagName('item')).map(function (it) {
+      var date = new Date(textOf(it, 'pubDate') || textOf(it, 'dc:date') || textOf(it, 'published'));
+      return {
+        title: stripHtml(textOf(it, 'title')),
+        link: textOf(it, 'link'),
+        summary: stripHtml(textOf(it, 'description')).slice(0, 220),
+        image: pickImage(it),
+        date: isNaN(date) ? null : date.getTime(),
+        source: source
+      };
+    }).filter(function (a) { return a.title && /^https?:\/\//.test(a.link); });
+  }
+
+  function timeAgo(ts) {
+    if (!ts) return '';
+    var s = Math.max(0, (Date.now() - ts) / 1000);
+    if (s < 60) return 'Baru saja';
+    if (s < 3600) return Math.floor(s / 60) + ' menit lalu';
+    if (s < 86400) return Math.floor(s / 3600) + ' jam lalu';
+    if (s < 172800) return 'Kemarin';
+    return new Date(ts).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+  }
+  function fullDate(ts) {
+    return ts ? new Date(ts).toLocaleString('id-ID', { dateStyle: 'full', timeStyle: 'short' }) : '';
+  }
+
+  function imgTag(a, cls) {
+    if (!a.image) return '<div class="ph ' + cls + ' grid place-items-center text-white/80 font-display font-extrabold text-2xl">RC News 24</div>';
+    return '<img src="' + esc(a.image) + '" alt="' + esc(a.title) + '" loading="lazy" referrerpolicy="no-referrer" class="' + cls + ' object-cover" ' +
+      'onerror="this.outerHTML=\'<div class=&quot;ph ' + cls + ' grid place-items-center text-white/80 font-display font-extrabold text-2xl&quot;>RC News 24</div>\'">';
+  }
+
+  function render(list) {
+    var h = list[0], rest = list.slice(1, 1 + TOTAL_CARDS);
+    $('headline').innerHTML =
+      '<article class="overflow-hidden rounded-3xl bg-white shadow-xl shadow-navy-900/10 lg:grid lg:grid-cols-5">' +
+        '<div class="lg:col-span-3">' + imgTag(h, 'h-64 w-full sm:h-96 lg:h-full lg:min-h-[26rem]') + '</div>' +
+        '<div class="flex flex-col justify-center p-6 sm:p-10 lg:col-span-2">' +
+          '<p class="mb-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-slate-500">' +
+            '<span class="rounded-full bg-brand-orange px-3 py-1 text-xs font-bold text-navy-900">Headline</span>' +
+            '<span>' + esc(h.source) + '</span><time title="' + esc(fullDate(h.date)) + '">' + esc(timeAgo(h.date)) + '</time></p>' +
+          '<h2 id="hl-title" class="font-display text-2xl font-extrabold leading-tight text-navy-900 sm:text-3xl">' + esc(h.title) + '</h2>' +
+          (h.summary ? '<p class="clamp-3 mt-4 text-base leading-relaxed text-slate-600">' + esc(h.summary) + '</p>' : '') +
+          '<a href="' + esc(h.link) + '" target="_blank" rel="noopener noreferrer" class="mt-6 inline-flex w-fit items-center rounded-full bg-brand-blue px-6 py-3 text-sm font-semibold text-white transition hover:bg-navy-800">Baca Selengkapnya</a>' +
+        '</div></article>';
+
+    $('grid').innerHTML = rest.map(function (a) {
+      return '<article class="flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white transition hover:border-brand-blue/40 hover:shadow-lg">' +
+        imgTag(a, 'h-48 w-full') +
+        '<div class="flex flex-1 flex-col p-5">' +
+          '<p class="mb-2 text-xs text-slate-500">' + esc(a.source) + ' &middot; <time title="' + esc(fullDate(a.date)) + '">' + esc(timeAgo(a.date)) + '</time></p>' +
+          '<h3 class="clamp-3 font-display text-lg font-bold leading-snug text-navy-900">' + esc(a.title) + '</h3>' +
+          '<a href="' + esc(a.link) + '" target="_blank" rel="noopener noreferrer" class="mt-auto inline-flex w-fit pt-4 text-sm font-semibold text-brand-blue hover:underline">Baca Selengkapnya</a>' +
+        '</div></article>';
+    }).join('');
+
+    $('loading').classList.add('hidden'); $('error').classList.add('hidden');
+    $('headline').classList.remove('hidden'); $('lainnya').classList.remove('hidden');
+  }
+
+  function showError() {
+    $('loading').classList.add('hidden'); $('headline').classList.add('hidden'); $('lainnya').classList.add('hidden');
+    $('error').classList.remove('hidden');
+  }
+
+  function load(isRefresh) {
+    if (!isRefresh) { $('loading').classList.remove('hidden'); $('error').classList.add('hidden'); }
+    return Promise.all(SOURCES.map(function (s) {
+      return fetchText(s.url).then(function (x) { return parseFeed(x, s.name); }).catch(function () { return []; });
+    })).then(function (groups) {
+      var seen = {}, all = [];
+      groups.forEach(function (g) { g.forEach(function (a) { if (!seen[a.link]) { seen[a.link] = 1; all.push(a); } }); });
+      all.sort(function (a, b) { return (b.date || 0) - (a.date || 0); });
+      if (all.length < 1) throw new Error('kosong');
+      all = all.slice(0, 1 + TOTAL_CARDS);
+      try { localStorage.setItem(CACHE_KEY, JSON.stringify({ t: Date.now(), list: all })); } catch (e) {}
+      render(all);
+      $('status').textContent = 'Diperbarui ' + new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) + ' WIB';
+    }).catch(function () {
+      var cached = null;
+      try { cached = JSON.parse(localStorage.getItem(CACHE_KEY)); } catch (e) {}
+      if (cached && cached.list && cached.list.length) {
+        render(cached.list);
+        $('status').textContent = 'Menampilkan berita tersimpan, sumber sedang sulit dijangkau';
+      } else if (!isRefresh) { showError(); }
+    });
+  }
+
+  $('retry').addEventListener('click', function () { load(false); });
+  load(false);
+  setInterval(function () { if (!document.hidden) load(true); }, REFRESH_MS);
+})();
+</script>
+</body>
+</html>
