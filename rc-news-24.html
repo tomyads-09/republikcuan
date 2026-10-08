@@ -99,7 +99,7 @@ tailwind.config = {
   </section>
 
   <p class="mt-14 border-t border-slate-200 pt-6 text-xs leading-relaxed text-slate-500">
-    Berita ditampilkan otomatis dari RSS publik CNBC Indonesia dan Kontan. Seluruh hak cipta judul, ringkasan, dan gambar milik masing-masing penerbit; tombol "Baca Selengkapnya" membuka artikel asli di tab baru. Republik Cuan tidak menyimpan atau mengubah isi berita.
+    Berita ditampilkan otomatis dari RSS publik CNBC Indonesia, Kontan, dan CNN Indonesia. Seluruh hak cipta judul, ringkasan, dan gambar milik masing-masing penerbit; tombol "Baca Selengkapnya" membuka artikel asli di tab baru. Republik Cuan tidak menyimpan atau mengubah isi berita.
   </p>
 </main>
 
@@ -107,12 +107,14 @@ tailwind.config = {
 (function () {
   /* ====== PENGATURAN (silakan ubah di sini) ====== */
   var SOURCES = [
-    { name: 'CNBC Indonesia', url: 'https://www.cnbcindonesia.com/market/rss' },
+    { name: 'CNBC Indonesia', url: 'https://www.cnbcindonesia.com/market/rss/' },
     { name: 'CNBC Indonesia', url: 'https://www.cnbcindonesia.com/news/rss' },
     { name: 'Kontan',         url: 'https://investasi.kontan.co.id/rss' },
-    { name: 'Kontan',         url: 'https://keuangan.kontan.co.id/rss' }
+    { name: 'CNN Indonesia',  url: 'https://www.cnnindonesia.com/ekonomi/rss' }
   ];
+  // Urutan: proxy milik sendiri (Netlify Function) dulu, lalu proxy publik sebagai cadangan.
   var PROXIES = [
+    function (u) { return '/.netlify/functions/rss?url=' + encodeURIComponent(u); },
     function (u) { return 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u); },
     function (u) { return 'https://corsproxy.io/?' + encodeURIComponent(u); },
     function (u) { return 'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(u); }
