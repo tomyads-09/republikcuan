@@ -103,6 +103,19 @@ tailwind.config = {
   </p>
 </main>
 
+<!-- PEMBACA DI DALAM HALAMAN -->
+<div id="viewer" class="fixed inset-0 z-50 hidden flex-col bg-white" role="dialog" aria-modal="true" aria-label="Pembaca berita RC News 24 (tekan Esc atau tombol Tutup untuk kembali)">
+  <div class="flex items-center gap-3 bg-navy-900 px-4 py-3 text-white">
+    <button id="vback" type="button" class="inline-flex shrink-0 items-center gap-2 rounded-full bg-brand-orange px-4 py-2 text-sm font-bold text-navy-900 transition hover:bg-white">
+      <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>Tutup
+    </button>
+    <span class="hidden shrink-0 font-display text-sm font-bold sm:inline">RC News 24</span>
+    <p id="vtitle" class="hidden min-w-0 flex-1 truncate text-sm text-white/80 md:block"></p>
+    <a id="vopen" href="#" target="_blank" rel="noopener noreferrer" class="ml-auto shrink-0 rounded-full border border-white/30 px-4 py-2 text-sm font-semibold transition hover:bg-white hover:text-navy-900">Buka di tab baru</a>
+  </div>
+  <div id="vbody" class="relative min-h-0 flex-1 bg-paper"></div>
+</div>
+
 <script>
 (function () {
   /* ====== PENGATURAN (silakan ubah di sini) ====== */
@@ -188,7 +201,9 @@ tailwind.config = {
       'onerror="this.outerHTML=\'<div class=&quot;ph ' + cls + ' grid place-items-center text-white/80 font-display font-extrabold text-2xl&quot;>RC News 24</div>\'">';
   }
 
+  var ARTS = [];
   function render(list) {
+    ARTS = list;
     var h = list[0], rest = list.slice(1, 1 + TOTAL_CARDS);
     $('headline').innerHTML =
       '<article class="overflow-hidden rounded-3xl bg-white shadow-xl shadow-navy-900/10 lg:grid lg:grid-cols-5">' +
@@ -199,16 +214,16 @@ tailwind.config = {
             '<span>' + esc(h.source) + '</span><time title="' + esc(fullDate(h.date)) + '">' + esc(timeAgo(h.date)) + '</time></p>' +
           '<h2 id="hl-title" class="font-display text-2xl font-extrabold leading-tight text-navy-900 sm:text-3xl">' + esc(h.title) + '</h2>' +
           (h.summary ? '<p class="clamp-3 mt-4 text-base leading-relaxed text-slate-600">' + esc(h.summary) + '</p>' : '') +
-          '<a href="' + esc(h.link) + '" target="_blank" rel="noopener noreferrer" class="mt-6 inline-flex w-fit items-center rounded-full bg-brand-blue px-6 py-3 text-sm font-semibold text-white transition hover:bg-navy-800">Baca Selengkapnya</a>' +
+          '<a href="' + esc(h.link) + '" data-i="0" target="_blank" rel="noopener noreferrer" class="rc-read mt-6 inline-flex w-fit items-center rounded-full bg-brand-blue px-6 py-3 text-sm font-semibold text-white transition hover:bg-navy-800">Baca Selengkapnya</a>' +
         '</div></article>';
 
-    $('grid').innerHTML = rest.map(function (a) {
+    $('grid').innerHTML = rest.map(function (a, i) {
       return '<article class="flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white transition hover:border-brand-blue/40 hover:shadow-lg">' +
         imgTag(a, 'h-48 w-full') +
         '<div class="flex flex-1 flex-col p-5">' +
           '<p class="mb-2 text-xs text-slate-500">' + esc(a.source) + ' &middot; <time title="' + esc(fullDate(a.date)) + '">' + esc(timeAgo(a.date)) + '</time></p>' +
           '<h3 class="clamp-3 font-display text-lg font-bold leading-snug text-navy-900">' + esc(a.title) + '</h3>' +
-          '<a href="' + esc(a.link) + '" target="_blank" rel="noopener noreferrer" class="mt-auto inline-flex w-fit pt-4 text-sm font-semibold text-brand-blue hover:underline">Baca Selengkapnya</a>' +
+          '<a href="' + esc(a.link) + '" data-i="' + (i + 1) + '" target="_blank" rel="noopener noreferrer" class="rc-read mt-auto inline-flex w-fit pt-4 text-sm font-semibold text-brand-blue hover:underline">Baca Selengkapnya</a>' +
         '</div></article>';
     }).join('');
 
@@ -243,6 +258,47 @@ tailwind.config = {
       } else if (!isRefresh) { showError(); }
     });
   }
+
+  var viewer = $('viewer'), vbody = $('vbody'), current = null;
+  function panelHtml(a) {
+    return '<div class="absolute inset-0 overflow-auto"><article class="mx-auto max-w-2xl p-5 sm:p-8">' +
+      (a.image ? '<img src="' + esc(a.image) + '" alt="" referrerpolicy="no-referrer" class="mb-6 max-h-96 w-full rounded-2xl object-cover" onerror="this.remove()">' : '') +
+      '<p class="mb-2 text-sm text-slate-500">' + esc(a.source) + ' &middot; ' + esc(fullDate(a.date)) + '</p>' +
+      '<h2 class="font-display text-2xl font-extrabold leading-tight text-navy-900 sm:text-3xl">' + esc(a.title) + '</h2>' +
+      (a.summary ? '<p class="mt-4 text-base leading-relaxed text-slate-700">' + esc(a.summary) + '</p>' : '') +
+      '<a href="' + esc(a.link) + '" target="_blank" rel="noopener noreferrer" class="mt-6 inline-flex rounded-full bg-brand-blue px-6 py-3 text-sm font-semibold text-white transition hover:bg-navy-800">Baca artikel lengkap di ' + esc(a.source) + '</a>' +
+      '<p class="mt-4 text-xs text-slate-500">' + esc(a.source) + ' tidak mengizinkan artikelnya ditampilkan di dalam situs lain, jadi artikel lengkap dibuka di tab baru. Halaman RC News 24 tetap terbuka.</p>' +
+      '</article></div>';
+  }
+  function openViewer(a) {
+    current = a;
+    $('vtitle').textContent = a.title; $('vopen').href = a.link;
+    vbody.innerHTML = '<p class="p-10 text-center text-sm text-slate-500" role="status">Membuka berita dari ' + esc(a.source) + '...</p>';
+    viewer.classList.remove('hidden'); viewer.classList.add('flex'); document.body.style.overflow = 'hidden';
+    fetch('/.netlify/functions/rss?check=' + encodeURIComponent(a.link))
+      .then(function (r) { return r.json(); }).catch(function () { return { embeddable: false }; })
+      .then(function (res) {
+        if (current !== a) return;
+        if (res.embeddable) {
+          var f = document.createElement('iframe');
+          f.src = a.link; f.title = a.title; f.className = 'absolute inset-0 h-full w-full border-0 bg-white';
+          f.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-popups allow-forms');
+          vbody.innerHTML = ''; vbody.appendChild(f);
+        } else { vbody.innerHTML = panelHtml(a); }
+      });
+  }
+  function closeViewer() {
+    current = null; vbody.innerHTML = '';
+    viewer.classList.add('hidden'); viewer.classList.remove('flex'); document.body.style.overflow = '';
+  }
+  document.addEventListener('click', function (e) {
+    var l = e.target.closest && e.target.closest('a.rc-read');
+    if (!l || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey) return;
+    var a = ARTS[+l.getAttribute('data-i')];
+    if (a) { e.preventDefault(); openViewer(a); }
+  });
+  $('vback').addEventListener('click', closeViewer);
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && current) closeViewer(); });
 
   $('retry').addEventListener('click', function () { load(false); });
   load(false);
