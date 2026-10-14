@@ -31,8 +31,8 @@ const ARTICLES = [
     slug: "bisnis-modal-minimal-jadi-modal-maksimal",
     cat: "ide-bisnis",
     catLabel: "Ide Bisnis",
-    image: "/assets/images/artikel/bisnis-modal-minimal-jadi-modal-maksimal.svg",
-    imageAlt: "Grafik batang naik melambangkan modal kecil yang berkembang",
+    image: "https://images.pexels.com/photos/4473398/pexels-photo-4473398.jpeg?auto=compress&cs=tinysrgb&w=800&h=500&fit=crop",
+    imageAlt: "Pemilik kafe tersenyum menunjukkan papan buka usaha baru dengan modal kecil",
     title: "Bisnis Modal Minimal Jadi Modal Maksimal: 7 Cara Memutar Modal Kecil",
     excerpt: "7 cara realistis memutar modal kecil jadi usaha yang menghasilkan, lengkap dengan rencana 30 hari.",
     readTime: 6
@@ -41,8 +41,8 @@ const ARTICLES = [
     slug: "konsisten-dan-tekun-jatuh-bangun-usaha",
     cat: "ide-bisnis",
     catLabel: "Ide Bisnis",
-    image: "/assets/images/artikel/konsisten-dan-tekun-jatuh-bangun-usaha.svg",
-    imageAlt: "Anak tangga menanjak melambangkan ketekunan membangun usaha",
+    image: "https://images.pexels.com/photos/8422729/pexels-photo-8422729.jpeg?auto=compress&cs=tinysrgb&w=800&h=500&fit=crop",
+    imageAlt: "Pemilik toko berdiri teguh di depan usahanya sebagai simbol ketekunan",
     title: "Konsisten dan Tekun: Kisah Jatuh Bangun Pengusaha dan Pelajarannya",
     excerpt: "Jatuh bangun, tantangan, dan 7 kebiasaan agar usahamu tetap jalan saat semangat turun.",
     readTime: 6
