@@ -28,6 +28,66 @@
 
 const ARTICLES = [
   {
+    slug: "skill-jualan-digital",
+    cat: "pemasaran",
+    catLabel: "Pemasaran",
+    image: "https://images.pexels.com/photos/36730466/pexels-photo-36730466.jpeg?auto=compress&cs=tinysrgb&w=800&h=500&fit=crop",
+    imageAlt: "Wanita tersenyum memegang tablet di dalam toko",
+    title: "Skill Jualan Digital yang Bisa Hasilkan Omset Ratusan Juta",
+    excerpt: "5 skill jualan digital yang wajib dikuasai, dari copywriting sampai closing, plus hitungan omzet yang jujur.",
+    readTime: 6
+  },
+  {
+    slug: "sedekah-10-persen-bisnis",
+    cat: "khazanah-inspirasi",
+    catLabel: "Khazanah Inspirasi",
+    image: "https://images.pexels.com/photos/36330752/pexels-photo-36330752.jpeg?auto=compress&cs=tinysrgb&w=800&h=500&fit=crop",
+    imageAlt: "Pemilik toko ramah tersenyum di tokonya",
+    title: "Sedekah 10% Bikin Omzet Berlipat? Ini Cara Berbisnis dengan Allah",
+    excerpt: "Refleksi tentang sedekah dalam bisnis, dalil Al-Qur'an, dan cara menerapkannya tanpa menjanjikan pasti kaya.",
+    readTime: 6
+  },
+  {
+    slug: "cara-mengelola-pembukuan-warung",
+    cat: "kelola-uang",
+    catLabel: "Kelola Uang",
+    image: "https://images.pexels.com/photos/8201192/pexels-photo-8201192.jpeg?auto=compress&cs=tinysrgb&w=800&h=500&fit=crop",
+    imageAlt: "Pemilik toko menghitung penjualan dengan kalkulator",
+    title: "5 Cara Mengelola Pembukuan Warung, Nomor 4 Sering Dilupakan",
+    excerpt: "5 cara praktis mengelola pembukuan warung agar untung terus bertambah. Nomor 4 paling sering dilupakan.",
+    readTime: 5
+  },
+  {
+    slug: "manajemen-toko-kelontong-tionghoa",
+    cat: "ide-bisnis",
+    catLabel: "Ide Bisnis",
+    image: "https://images.pexels.com/photos/30848031/pexels-photo-30848031.jpeg?auto=compress&cs=tinysrgb&w=800&h=500&fit=crop",
+    imageAlt: "Pemilik toko kelontong di dalam tokonya yang penuh barang",
+    title: "8 Manajemen Toko Kelontong Ala Tionghoa, Modal Cepat Balik",
+    excerpt: "8 prinsip manajemen toko kelontong ala Tionghoa yang sering terlihat pada toko awet, dibahas apa adanya.",
+    readTime: 6
+  },
+  {
+    slug: "budidaya-lele-modal-galon-bekas",
+    cat: "ide-bisnis",
+    catLabel: "Ide Bisnis",
+    image: "https://images.pexels.com/photos/7509417/pexels-photo-7509417.jpeg?auto=compress&cs=tinysrgb&w=800&h=500&fit=crop",
+    imageAlt: "Ikan lele berenang di kolam budidaya",
+    title: "Budidaya Lele Modal Galon Bekas, Untungnya Bisa Berapa?",
+    excerpt: "Cara budidaya lele dengan galon bekas, rincian modal, dan estimasi keuntungan per siklus panen.",
+    readTime: 6
+  },
+  {
+    slug: "modal-usaha-warung-sembako",
+    cat: "ide-bisnis",
+    catLabel: "Ide Bisnis",
+    image: "https://images.pexels.com/photos/8475203/pexels-photo-8475203.jpeg?auto=compress&cs=tinysrgb&w=800&h=500&fit=crop",
+    imageAlt: "Dua pekerja merapikan barang di warung sembako",
+    title: "Modal Usaha Warung Sembako Modal Kecil & Estimasi Keuntungannya",
+    excerpt: "Rincian modal nyata dan estimasi keuntungan warung sembako untuk pemula, dari modal Rp 3 juta sampai Rp 20 juta.",
+    readTime: 7
+  },
+  {
     slug: "bisnis-modal-minimal-jadi-modal-maksimal",
     cat: "ide-bisnis",
     catLabel: "Ide Bisnis",
