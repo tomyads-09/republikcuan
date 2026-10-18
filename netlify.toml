@@ -50,3 +50,16 @@
   to = "/404.html"
   status = 404
   force = true
+
+# --- RC News 24 sudah dihapus: alihkan alamat lama ke beranda ---
+[[redirects]]
+  from = "/rc-news-24.html"
+  to = "/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/rc-news-24"
+  to = "/"
+  status = 301
+  force = true
