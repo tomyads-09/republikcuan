@@ -195,6 +195,12 @@
     font-family:'JetBrains Mono',monospace;
   }
 
+  .ua-about{font-size:12px;line-height:1.6;color:#64748b;padding:0 16px 10px;max-width:720px;margin:0 auto}
+  .ua-about summary{cursor:pointer;text-align:center;color:#475569;font-weight:600;list-style:none}
+  .ua-about summary::-webkit-details-marker{display:none}
+  .ua-about p{margin:6px 0 0}
+  .ua-about a{color:#1D4FD8;text-decoration:underline}
+
   @media (max-width:640px){
     .ua-msg{max-width:88%;}
   }
@@ -211,7 +217,7 @@
     <a href="../index.html" class="ua-back" aria-label="Kembali ke beranda">←</a>
     <div class="ua-avatar">UA</div>
     <div>
-      <div class="ua-title">Usaha AI</div>
+      <h1 class="ua-title" style="margin:0">Usaha AI</h1>
       <div class="ua-status">Online — siap bantu usahamu</div>
     </div>
   </header>
@@ -232,6 +238,11 @@
     <button class="ua-send" id="uaSend" aria-label="Kirim pesan">➤</button>
   </div>
   <div class="ua-disclaimer">Usaha AI — paling jago soal bisnis &amp; usaha, tapi siap bantu topik lain juga</div>
+  <details class="ua-about">
+    <summary>Apa itu Usaha AI?</summary>
+    <p>Usaha AI adalah asisten AI dari RepublikCuan untuk UMKM, pelaku usaha, dan pemula yang ingin memulai atau mengembangkan bisnis. Tanyakan ide usaha, caption dan konten promosi, hitungan untung, strategi pemasaran, sampai pesan balasan untuk pelanggan.</p>
+    <p>Jawaban bersifat informasi umum dan bukan nasihat hukum, keuangan, atau profesional, serta bisa mengandung kekeliruan. Mohon tidak memasukkan data sensitif seperti nomor KTP, rekening, atau kata sandi. Baca <a href="../kebijakan-privasi.html">Kebijakan Privasi</a> dan <a href="../disclaimer.html">Disclaimer</a> kami.</p>
+  </details>
 
 </div>
 
