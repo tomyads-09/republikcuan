@@ -33,7 +33,7 @@ const ARTICLES = [
     catLabel: "Pemasaran",
     image: "https://images.pexels.com/photos/36730466/pexels-photo-36730466.jpeg?auto=compress&cs=tinysrgb&w=800&h=500&fit=crop",
     imageAlt: "Wanita tersenyum memegang tablet di dalam toko",
-    title: "Skill Jualan Digital yang Bisa Hasilkan Omset Ratusan Juta",
+    title: "5 Skill Jualan Digital yang Perlu Dikuasai Pelaku Usaha Online",
     excerpt: "5 skill jualan digital yang wajib dikuasai, dari copywriting sampai closing, plus hitungan omzet yang jujur.",
     readTime: 6
   },
@@ -43,7 +43,7 @@ const ARTICLES = [
     catLabel: "Khazanah Inspirasi",
     image: "https://images.pexels.com/photos/36330752/pexels-photo-36330752.jpeg?auto=compress&cs=tinysrgb&w=800&h=500&fit=crop",
     imageAlt: "Pemilik toko ramah tersenyum di tokonya",
-    title: "Sedekah 10% Bikin Omzet Berlipat? Ini Cara Berbisnis dengan Allah",
+    title: "Sedekah dalam Bisnis: Dalil, Praktik, dan Cara Menerapkannya",
     excerpt: "Refleksi tentang sedekah dalam bisnis, dalil Al-Qur'an, dan cara menerapkannya tanpa menjanjikan pasti kaya.",
     readTime: 6
   },
@@ -113,7 +113,7 @@ const ARTICLES = [
     catLabel: "Tips AI",
     image: "/assets/images/artikel/10-alat-ai-kreator-konten-viral.jpg",
     imageAlt: "10 alat AI terbesar untuk kreator konten",
-    title: "Bongkar Rahasia Kreator Viral: 10 Alat AI Terbesar untuk Sulap Konten",
+    title: "10 Alat AI untuk Kreator Konten dan Cara Memakainya",
     excerpt: "Dari ChatGPT sampai Notion AI — alat-alat AI yang dipakai kreator besar biar bisa posting berkali-kali sehari tanpa burnout.",
     readTime: 8
   },
@@ -203,7 +203,7 @@ const ARTICLES = [
     catLabel: "Ide Bisnis",
     image: "https://images.pexels.com/photos/30848031/pexels-photo-30848031.jpeg?auto=compress&cs=tinysrgb&w=800&h=500&fit=crop",
     imageAlt: "Pemilik toko kecil / bisnis sampingan",
-    title: "Ide Ide Bisnis Modal Kecil untuk Karyawan Sibuk",
+    title: "Ide Bisnis Sampingan Modal Kecil untuk Karyawan yang Sibuk",
     excerpt: "Usaha yang tetap bisa jalan meski waktumu terbatas.",
     readTime: 5
   },
@@ -223,7 +223,7 @@ const ARTICLES = [
     catLabel: "Aplikasi",
     image: "https://images.pexels.com/photos/6771899/pexels-photo-6771899.jpeg?auto=compress&cs=tinysrgb&w=800&h=500&fit=crop",
     imageAlt: "Aplikasi penghasil uang di smartphone",
-    title: "7 Aplikasi Cuan Asli dan Aman, Sudah Cair",
+    title: "Aplikasi Penghasil Uang: Cara Menilai yang Aman dan Jenis yang Layak Dicoba",
     excerpt: "Daftar aplikasi yang benar-benar membayar penggunanya.",
     readTime: 6
   },
