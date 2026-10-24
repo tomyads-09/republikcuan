@@ -40,6 +40,7 @@
   <section class="page-hero">
     <div class="container">
       <div class="breadcrumb"><a href="/">Beranda</a> / <span>Layanan</span></div>
+      <img src="../assets/images/rc-legal-logo.png" alt="Logo RC Legal: Legalitas aman, usaha makin nyaman" width="112" height="112" style="display:block;width:112px;height:112px;margin:6px 0 16px;filter:drop-shadow(0 6px 14px rgba(10,27,51,.18))">
       <p style="color:var(--muted);max-width:720px;margin-bottom:14px">RC Legal adalah unit layanan konsultasi legalitas usaha di bawah Republik Cuan, membantu perorangan maupun badan usaha mengurus pendirian, perubahan, dan perizinan usaha secara resmi — mulai dari PT, CV, Yayasan, Koperasi, PMA, sampai sertifikasi dan izin khusus seperti SBU, Merek, SNI, hingga PPIU &amp; PIHK — dengan proses yang jelas, transparan, dan didampingi sampai tuntas.</p>
       <h1>RC Legal — Jasa Pendirian &amp; Perizinan Usaha</h1>
       <p style="color:var(--muted);max-width:640px;margin-top:10px">Bantu urus legalitas usahamu dari nol sampai jadi — cepat, jelas prosesnya, dan tanpa ribet. Konsultasi gratis dulu via WhatsApp sebelum mulai.</p>
@@ -478,10 +479,11 @@
      di file layanan/index.html
      ============================================ -->
 <style>
+  #rcl-fab .rcl-badge{position:absolute;right:-6px;top:-6px;width:26px;height:26px;border-radius:50%;background:#0EA152;color:#fff;font-size:14px;display:flex;align-items:center;justify-content:center;border:2px solid #fff}
   #rcl-fab{
     position:fixed;bottom:22px;right:22px;z-index:200;
     width:60px;height:60px;border-radius:50%;
-    background:linear-gradient(135deg,#0EA152,#0A1B33);
+    background:#fff;
     border:none;box-shadow:0 8px 20px rgba(10,27,51,.3);
     cursor:pointer;display:flex;align-items:center;justify-content:center;
     font-size:26px;color:#fff;
@@ -505,10 +507,10 @@
   #rcl-send{background:#0EA152;border:none;color:#fff;width:36px;height:36px;border-radius:50%;cursor:pointer;flex-shrink:0}
 </style>
 
-<button id="rcl-fab" aria-label="Tanya soal paket legalitas">💬</button>
+<button id="rcl-fab" aria-label="Tanya soal paket legalitas"><img src="../assets/images/rc-legal-logo-sm.png" alt="" width="52" height="52" style="width:52px;height:52px;display:block"><span class="rcl-badge" aria-hidden="true">💬</span></button>
 <div id="rcl-panel">
   <div id="rcl-head">
-    <span>Tanya Paket Legalitas</span>
+    <span style="display:flex;align-items:center;gap:10px"><img src="../assets/images/rc-legal-logo-sm.png" alt="" width="30" height="30" style="width:30px;height:30px;display:block"> Tanya Paket Legalitas</span>
     <button id="rcl-close" aria-label="Tutup">✕</button>
   </div>
   <div id="rcl-chat">
