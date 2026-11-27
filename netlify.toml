@@ -64,154 +64,15 @@
   status = 301
   force = true
 
-# --- Satukan URL: alamat tanpa .html dialihkan (301) ke versi .html yang menjadi canonical ---
-# Tujuan: Google hanya melihat satu alamat per halaman (hilangkan 'Halaman alternatif dengan tag kanonis').
+# --- Halaman kembar Usaha AI: alihkan ke alamat resmi ---
 [[redirects]]
-  from = "/tentang"
-  to = "/tentang.html"
+  from = "/aplikasi/usaha-ai.html"
+  to = "/usaha-ai/"
   status = 301
   force = true
 
 [[redirects]]
-  from = "/kontak"
-  to = "/kontak.html"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/disclaimer"
-  to = "/disclaimer.html"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/kebijakan-privasi"
-  to = "/kebijakan-privasi.html"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/artikel/10-alat-ai-terbesar-kreator-konten-viral"
-  to = "/artikel/10-alat-ai-terbesar-kreator-konten-viral.html"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/artikel/10-cara-menghasilkan-uang-dari-rumah-2026"
-  to = "/artikel/10-cara-menghasilkan-uang-dari-rumah-2026.html"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/artikel/7-aplikasi-penghasil-uang-aman-terbukti-cair"
-  to = "/artikel/7-aplikasi-penghasil-uang-aman-terbukti-cair.html"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/artikel/belajar-dari-rasulullah-sukses-berdagang-tanpa-riba"
-  to = "/artikel/belajar-dari-rasulullah-sukses-berdagang-tanpa-riba.html"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/artikel/bisnis-modal-minimal-jadi-modal-maksimal"
-  to = "/artikel/bisnis-modal-minimal-jadi-modal-maksimal.html"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/artikel/budidaya-lele-modal-galon-bekas"
-  to = "/artikel/budidaya-lele-modal-galon-bekas.html"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/artikel/cara-atur-keuangan-usaha-sampingan"
-  to = "/artikel/cara-atur-keuangan-usaha-sampingan.html"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/artikel/cara-bikin-side-hustle-viral"
-  to = "/artikel/cara-bikin-side-hustle-viral.html"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/artikel/cara-dapat-kerja-remote-untuk-pemula"
-  to = "/artikel/cara-dapat-kerja-remote-untuk-pemula.html"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/artikel/cara-kerja-freelance-untuk-pemula"
-  to = "/artikel/cara-kerja-freelance-untuk-pemula.html"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/artikel/cara-mengelola-pembukuan-warung"
-  to = "/artikel/cara-mengelola-pembukuan-warung.html"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/artikel/ide-bisnis-sampingan-modal-kecil-karyawan"
-  to = "/artikel/ide-bisnis-sampingan-modal-kecil-karyawan.html"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/artikel/konsisten-dan-tekun-jatuh-bangun-usaha"
-  to = "/artikel/konsisten-dan-tekun-jatuh-bangun-usaha.html"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/artikel/manajemen-toko-kelontong-tionghoa"
-  to = "/artikel/manajemen-toko-kelontong-tionghoa.html"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/artikel/manfaatkan-ai-untuk-nambah-cuan"
-  to = "/artikel/manfaatkan-ai-untuk-nambah-cuan.html"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/artikel/modal-usaha-warung-sembako"
-  to = "/artikel/modal-usaha-warung-sembako.html"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/artikel/panduan-affiliate-marketing-pemula"
-  to = "/artikel/panduan-affiliate-marketing-pemula.html"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/artikel/panduan-legalitas-usaha-umkm-pemula"
-  to = "/artikel/panduan-legalitas-usaha-umkm-pemula.html"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/artikel/saat-bisnis-sepi-menata-hati-mengubah-strategi"
-  to = "/artikel/saat-bisnis-sepi-menata-hati-mengubah-strategi.html"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/artikel/sedekah-10-persen-bisnis"
-  to = "/artikel/sedekah-10-persen-bisnis.html"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/artikel/skill-jualan-digital"
-  to = "/artikel/skill-jualan-digital.html"
+  from = "/aplikasi/usaha-ai"
+  to = "/usaha-ai/"
   status = 301
   force = true
